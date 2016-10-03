@@ -34,6 +34,7 @@ var app = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
+		app.loginCall();
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
@@ -46,11 +47,17 @@ var app = {
 
         console.log('Received Event: ' + id);
     },
-	loginCall: function(login, password) {
+	loginCall: function() {
 		$.ajax({
-			url: 'http://lbwx.webaholix.sk',
+			url: 'http://eventmanager.webaholix.sk/api/login/',
 			type: 'POST',
-			data: JSON.stringify({login: login, password: password}),
+			data: {
+				request: {
+					action: 'login',
+					data: JSON.stringify({login: 'AdminWX', password: 'hei3h6nsd'}),
+					device: JSON.stringify(device)
+				}
+			},
 			dataType: 'json',
 			success: function (data) {
 				alert(JSON.stringify(data));
