@@ -48,14 +48,9 @@ var app = {
     },
 	loginCall: function(login, password) {
 		$.ajax({
-			url: 'http://eventmanager.webaholix.sk/api/login/',
+			url: 'http://lbwx.webaholix.sk',
 			type: 'POST',
-			async: false,
-			data: {request: {
-				action: 'login',
-				data: JSON.stringify({login: login, password: password}),
-				device: JSON.stringify(device)
-			}},
+			data: JSON.stringify({login: login, password: password}),
 			dataType: 'json',
 			success: function (data) {
 				alert(JSON.stringify(data));
