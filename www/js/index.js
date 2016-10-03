@@ -50,7 +50,7 @@ var app = {
 	loginCall: function(login, password) {
 		alert('calling login');
 		$.ajax({
-			url: 'http://lbwx.webaholix.sk/api/login/',
+			url: 'http://eventmanager.webaholix.sk/api/login/',
 			type: 'POST',
 			data: {
 				action: 'login',
