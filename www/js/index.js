@@ -57,7 +57,7 @@ var app = {
 				data: JSON.stringify({login: login, password: password}),
 				device: JSON.stringify(device)
 			}},
-			dataType: 'jsonp',
+			dataType: 'json',
 			success: function (data) {
 				alert(JSON.stringify(data));
 			},
