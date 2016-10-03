@@ -52,11 +52,12 @@ var app = {
 		$.ajax({
 			url: 'http://eventmanager.webaholix.sk/api/login/',
 			type: 'POST',
-			data: {
+			async: false,
+			data: {request: {
 				action: 'login',
-				data: JSON.stringify({login: login,password: password}),
+				data: JSON.stringify({login: login, password: password}),
 				device: JSON.stringify(device)
-			},
+			}},
 			success: function (data) {
 				alert(JSON.stringify(data));
 			},
