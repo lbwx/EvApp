@@ -48,6 +48,7 @@ var app = {
         console.log('Received Event: ' + id);
     },
 	loginCall: function(login, password) {
+		alert('calling login');
 		$.ajax({
 			url: 'http://lbwx.webaholix.sk/api/login/',
 			type: 'POST',
@@ -58,6 +59,9 @@ var app = {
 			},
 			success: function (data) {
 				alert(JSON.stringify(data));
+			},
+			error: function(error) {
+				alert(JSON.stringify(error));
 			}
 		});
 	}
