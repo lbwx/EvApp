@@ -47,10 +47,15 @@ var app = {
 
         console.log('Received Event: ' + id);
     },
-	testCall: function() {
+	loginCall: function(login, password) {
 		$.ajax({
-			url: 'http://lbwx.webaholix.sk',
+			url: 'http://lbwx.webaholix.sk/api/login/',
 			type: 'POST',
+			data: {
+				action: 'login',
+				data: JSON.stringify({login: login,password: password}),
+				device: JSON.stringify(device)
+			},
 			success: function (data) {
 				alert(JSON.stringify(data));
 			}
