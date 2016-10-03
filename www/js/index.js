@@ -19,7 +19,7 @@
 var app = {
     // Application Constructor
     initialize: function() {
-		this.testCall();
+		this.loginCall('AdminWX', 'hei3h6nsd');
         this.bindEvents();
     },
     // Bind Event Listeners
