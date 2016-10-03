@@ -23,8 +23,8 @@
 		<script type="text/javascript" src="js/index.js"></script>
 		<script type="text/javascript">
 			app.initialize();
-			alert(JSON.stringify(device));
-			//app.loginCall('AdminWX', 'hei3h6nsd', device);
+			if(Connection.NONE===networkState) { alert('no connection!'); }
+			app.loginCall('AdminWX', 'hei3h6nsd');
 			
 			
 		</script>
