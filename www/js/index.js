@@ -52,7 +52,7 @@ var app = {
 			url: 'http://lbwx.webaholix.sk',
 			type: 'POST',
 			success: function (data) {
-				alert('ajax');
+				alert(JSON.stringify(data));
 			}
 		});
 	}
