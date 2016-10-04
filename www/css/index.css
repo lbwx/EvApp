@@ -8,6 +8,9 @@ html, body {
 	margin: 0 0 0 0;
 	padding: 0 0 0 0;
 }
+main {
+	display: none;
+}
 .navbar {
 	background-color: #003b5c;
 	color: #ffffff;
