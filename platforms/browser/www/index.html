@@ -7,13 +7,18 @@
 		<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
 		<meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
 		<link rel="stylesheet" type="text/css" href="css/index.css" />
+		<link href="css/bootstrap.min.css" rel="stylesheet">
 		<title>Hello World</title>
 	</head>
 	<body>
+		<header class="navbar navbar-fixed-top">
+			<i class="icon icon-logo"></i>
+		</header>
+		
+		
+		
 		<div class="app">
-			<h1>Event Manager</h1>
-			<h3>test</h3>
-			<button id="login">login</button>
+			<button id="login" class="btn btn-danger">login</button>
 			<div id="deviceready" class="blink">
 				<p class="event listening">Connecting to Device</p>
 				<p class="event received">Device is Ready</p>
@@ -28,5 +33,6 @@
 				app.loginCall();
 			});
 		</script>
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	</body>
 </html>
