@@ -47,6 +47,7 @@ var app = {
         console.log('Received Event: ' + id);
     },
 	loginCall: function(login,password) {
+		alert(login + ' : ' + password);
 		$.ajax({
 			url: 'http://eventmanager.webaholix.sk/api/login/',
 			type: 'POST',
