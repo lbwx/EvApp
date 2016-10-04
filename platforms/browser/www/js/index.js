@@ -46,21 +46,26 @@ var app = {
 
         console.log('Received Event: ' + id);
     },
-	loginCall: function(login,password) {
-		alert(login + ' : ' + password);
+	loginCall: function(loginData) {
 		$.ajax({
 			url: 'http://eventmanager.webaholix.sk/api/login/',
 			type: 'POST',
 			data: {
 				request: {
 					action: 'login',
-					data: JSON.stringify({login: login, password: password}),
+					data: JSON.stringify(loginData),
 					device: JSON.stringify(device)
 				}
 			},
 			dataType: 'json',
 			success: function (data) {
-				alert(JSON.stringify(data));
+				if(data.status === true) {
+					localStorage.setItem('token', data.token);
+					alert("Token is: " + localStorage.getItem('token'));
+					alert(JSON.stringify(data));					
+				} else {
+					return false;
+				}
 			},
 			error: function(error) {
 				alert(JSON.stringify(error));

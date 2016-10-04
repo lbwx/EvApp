@@ -39,7 +39,6 @@
 		</main>
 		
 		
-		
 		<div class="app">
 			<div id="deviceready" class="blink">
 				<p class="event listening">Connecting to Device</p>
@@ -51,8 +50,13 @@
 		<script type="text/javascript" src="js/index.js"></script>
 		<script type="text/javascript">
 			app.initialize();
-			$('#login-submit').click(function (){
-				app.loginCall($('#login').val(), $('#password').val());
+			$('#login-submit').click(function (e){
+				e.preventDefault();
+				var loginData = {
+					login: $('#login').val(),
+					password: $('#password').val()
+				};
+				app.loginCall(loginData);
 			});
 		</script>
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
