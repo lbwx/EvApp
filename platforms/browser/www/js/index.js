@@ -37,7 +37,12 @@ var app = {
     },
     // Update DOM on a Received Event
     receivedEvent: function() {
-        $('#page-login').removeClass('hidden');
+		if(localStorage.getItem('token')===null) {
+			$('#page-login').removeClass('hidden');
+		} else {
+			$('#page-event-list').removeClass('hidden');
+			app.loadEvents();
+		}
     },
 	ajaxCall: function(action, request) {
 		$.ajax({
@@ -56,6 +61,7 @@ var app = {
 			switch(response.type) {
 				case 'login': app.loginResponse(response.result, response.token); break;
 				case 'loadEvents': app.loadEventResponse(response.result); break;
+				case 'eventDetail': app.eventDetailResponse(response.result); break;
 			}
 		} else {
 			alert('Error, wrong response!');
@@ -76,7 +82,23 @@ var app = {
 			eventList += '<td><strong>' + event.invited + '</strong> Gäste geladen<br>' + event.checked + ' Gäste eingecheckt (' + Math.round(100 * parseInt(event.checked) / parseInt(event.invited)) + '%)</td>';
 			eventList += '</tr>';
 		});
-		$('tbody').html(eventList);
+		$('#page-event-list tbody').html(eventList);
+	},
+	eventDetailResponse: function(result) {
+		var guestList;
+		result.forEach(function(guest){
+			guestList += '<tr data-iid="' + guest.iid + '">';
+			guestList += '<td>' + guest.lastname + '</td>';
+			guestList += '<td>' + guest.firstname + '</td>';
+			guestList += '<td>' + guest.title + '</td>';
+			guestList += '<td>' + guest.employer + '</td>';
+			guestList += '<td>' + guest.plus + '</td>';
+			guestList += '<td>' + guest.vip + '</td>';
+			guestList += '<td>+</td>';
+			guestList += '<td>' + guest.checkin + '</td>';
+			guestList += '</tr>';
+		});
+		$('#page-event-detail tbody').html(guestList);
 	},
 	login: function(loginData) {
 		var request = {
@@ -93,13 +115,16 @@ var app = {
 			device: JSON.stringify(device)
 		};
 		app.ajaxCall('login', request);
+	},
+	openEvent: function(eid) {
+		var request = {
+			action: 'eventDetail',
+			data: JSON.stringify({
+				token: localStorage.getItem('token'),
+				eid: eid
+			}),
+			device: JSON.stringify(device)
+		};
+		app.ajaxCall('login', request);
 	}
 };
-
-$(function(){
-	$('.icon-logo').click(function(){
-		alert('Logged out');
-		localStorage.removeItem('token');
-		window.location.replace('index.html');
-	});
-});
