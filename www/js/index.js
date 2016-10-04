@@ -62,11 +62,11 @@ var app = {
 		}
 	},
 	loginResponse: function(result, token) {
-		alert(result);
 		localStorage.setItem('token', token);
 		window.location.replace($('#login-form').attr('action'));
 	},
 	loadEventResponse: function(result) {
+		alert('3');
 		var eventList;
 		result.forEach(function(event) {
 			eventList += '<tr data-event="' + event.eid + '">';
@@ -75,7 +75,9 @@ var app = {
 			eventList += '<td><strong>' + event.invited + '</strong> Gäste geladen<br>' + event.checked + ' Gäste eingecheckt (' + Math.round(100 * parseInt(event.checked) / parseInt(event.invited)) + '%)</td>';
 			eventList += '</tr>';
 		});
+		alert('4');
 		$('tbody').html(eventList);
+		alert('5');
 	},
 	login: function(loginData) {
 		var request = {
@@ -86,6 +88,7 @@ var app = {
 		app.ajaxCall('login', request);
 	},
 	loadEvents: function() {
+		alert('2');
 		var request = {
 			action: 'loadEvents',
 			data: JSON.stringify({token: localStorage.getItem('token')}),
