@@ -1,6 +1,6 @@
 {
-  "name": "My App",
-  "description": "Description of your app",
+  "name": "Event Manager",
+  "description": "Event Manager",
   "launch_path": "/index.html",
   "icons": {
     "128": "/img/logo.png"

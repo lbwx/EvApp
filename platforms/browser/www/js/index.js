@@ -19,7 +19,6 @@
 var app = {
     // Application Constructor
     initialize: function() {
-		this.testCall();
         this.bindEvents();
     },
     // Bind Event Listeners
@@ -47,12 +46,23 @@ var app = {
 
         console.log('Received Event: ' + id);
     },
-	testCall: function() {
+	loginCall: function() {
 		$.ajax({
-			url: 'http://lbwx.webaholix.sk',
+			url: 'http://eventmanager.webaholix.sk/api/login/',
 			type: 'POST',
+			data: {
+				request: {
+					action: 'login',
+					data: JSON.stringify({login: 'AdminWX', password: 'hei3h6nsd'}),
+					device: JSON.stringify(device)
+				}
+			},
+			dataType: 'json',
 			success: function (data) {
-				alert('ajax');
+				alert(JSON.stringify(data));
+			},
+			error: function(error) {
+				alert(JSON.stringify(error));
 			}
 		});
 	}

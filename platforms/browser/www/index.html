@@ -9,10 +9,11 @@
 		<link rel="stylesheet" type="text/css" href="css/index.css" />
 		<title>Hello World</title>
 	</head>
-
 	<body>
 		<div class="app">
 			<h1>Event Manager</h1>
+			<h3>test</h3>
+			<button id="login">login</button>
 			<div id="deviceready" class="blink">
 				<p class="event listening">Connecting to Device</p>
 				<p class="event received">Device is Ready</p>
@@ -23,6 +24,9 @@
 		<script type="text/javascript" src="js/index.js"></script>
 		<script type="text/javascript">
 			app.initialize();
+			$('#login').click(function (){
+				app.loginCall();
+			});
 		</script>
 	</body>
 </html>
