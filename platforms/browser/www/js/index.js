@@ -75,7 +75,7 @@ var app = {
 		result.forEach(function(event) {
 			eventList += '<tr data-event="' + event.eid + '">';
 			eventList += '<td>' + event.name + '<br><strong>' + event.start + '</strong> / ' + event.place + '</td>';
-			eventList += '<td class="info"><i class="icon icon-list"></i></td>';
+			eventList += '<td class="info"><a href="javascript:app.openEvent('+event.eid+');"><i class="icon icon-list"></i></a></td>';
 			eventList += '<td><strong>' + event.invited + '</strong> Gäste geladen<br>' + event.checked + ' Gäste eingecheckt (' + Math.round(100 * parseInt(event.checked) / parseInt(event.invited)) + '%)</td>';
 			eventList += '</tr>';
 		});
@@ -92,7 +92,7 @@ var app = {
 			guestList += '<td>' + guest.plus + '</td>';
 			guestList += '<td>' + guest.vip + '</td>';
 			guestList += '<td>+</td>';
-			guestList += '<td>' + guest.checkin + '</td>';
+			guestList += '<td><a href="javascript:app.changeCheckIn(' + guest.iid + ');">' + guest.checkin + '</a></td>';
 			guestList += '</tr>';
 		});
 		$('#page-event-detail tbody').html(guestList);
@@ -124,6 +124,9 @@ var app = {
 			device: JSON.stringify(device)
 		};
 		app.ajaxCall('login', request);
+	},
+	changeCheckIn: function(iid) {
+		alert(iid);
 	}
 };
 

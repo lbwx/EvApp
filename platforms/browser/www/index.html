@@ -14,7 +14,12 @@
 		<header class="navbar navbar-static-top">
 			<div class="container-fluid">
 				<div class="navbar-header">
-					<h1 class="col-sm-offset-1 col-sm-10"><i class="icon icon-logo"></i>Event manager</h1>
+					<h1><i class="icon icon-logo" onclick="show.login();"></i>Event manager</h1>
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="javascript:show.eventList();">test</a></li>
+					</ul>
 				</div>
 			</div>
 		</header>
@@ -70,14 +75,6 @@
 			$('#login-submit').click(function(e){
 				e.preventDefault();
 				app.login({login:$('#login').val(),password:$('#password').val()});
-			});
-
-			$('.icon-logo').click(function(){
-				show.login();
-			});
-
-			$(document).on('click', '.info', function(){
-				app.openEvent($(this).parent('tr').data('event'));
 			});
 		</script>
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
