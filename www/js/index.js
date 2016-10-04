@@ -46,23 +46,16 @@ var app = {
 
         console.log('Received Event: ' + id);
     },
-	loginCall: function(loginData) {
+	ajaxCall: function(action, request) {
 		$.ajax({
-			url: 'http://eventmanager.webaholix.sk/api/login/',
+			url: 'http://eventmanager.webaholix.sk/api/' + action + '/',
 			type: 'POST',
-			data: {
-				request: {
-					action: 'login',
-					data: JSON.stringify(loginData),
-					device: JSON.stringify(device)
-				}
-			},
+			data: {request: request},
 			dataType: 'json',
 			success: function (data) {
 				if(data.status === true) {
 					localStorage.setItem('token', data.token);
-					alert("Token is: " + localStorage.getItem('token'));
-					alert(JSON.stringify(data));					
+					window.location.replace($('#login-form').attr('action'));					
 				} else {
 					return false;
 				}
@@ -71,5 +64,13 @@ var app = {
 				alert(JSON.stringify(error));
 			}
 		});
+	},
+	loginCall: function(loginData) {
+		var request = {
+			action: 'login',
+			data: JSON.stringify(loginData),
+			device: JSON.stringify(device)
+		};
+		app.ajaxCall('login', request);
 	}
 };
