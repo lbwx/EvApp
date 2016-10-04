@@ -2,8 +2,11 @@
     Created on : 20-Sep-2016, 13:17:50
     Author     : Ľuboš Babocký
 */
-body {
-	padding-top: 60px;
+html, body {
+	height: 100%;
+	width: 100%;
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
 }
 .navbar {
 	background-color: #003b5c;
@@ -17,9 +20,8 @@ body {
 	vertical-align: middle;
 }
 .icon-logo {
-	width: 12em;
-	height: 50px;
-	margin-left: 1em;
+	width: 1.5em;
+	height: 1.5em;
 	background-image: url('../res/icon/android/emicon-144x144.png');
 }
 .icon-list {
@@ -27,4 +29,7 @@ body {
 	height: 2.5em;
 	background-color: #003b5d;
 	background-image: url('../images/List-white.png');
+}
+h1 {
+	display: inline-block;
 }
