@@ -31,7 +31,7 @@ main {
 	width: 2em;
 	height: 2.5em;
 	background-color: #003b5d;
-	background-image: url('../images/List-white.png');
+	background-image: url('../res/icon/app/List-white.png');
 }
 h1 {
 	display: inline-block;

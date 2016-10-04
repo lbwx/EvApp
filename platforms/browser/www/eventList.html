@@ -19,15 +19,19 @@
 			</div>
 		</header>
 
-		<main class="container">
-			EventList
+		<main class="container hidden">
+			<table class="table table-responsive table-striped table-condensed">
+				<tbody>
+					<tr style="height: 10em;"><td>loading...</td></tr>
+				</tbody>
+			</table>
 		</main>
 		<script type="text/javascript" src="js/jquery-3.0.0.min.js"></script>
 		<script type="text/javascript" src="cordova.js"></script>
 		<script type="text/javascript" src="js/index.js"></script>
 		<script type="text/javascript">
 			app.initialize();
-			alert("Token is: " + localStorage.getItem('token'));
+			$(function(){ app.loadEvents(); });
 		</script>
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	</body>

@@ -19,7 +19,7 @@
 			</div>
 		</header>
 
-		<main class="container">
+		<main class="container hidden">
 			<form id="login-form" action="eventList.html" class="form-horizontal col-sm-10">
 				<div class="form-group">
 					<label for="login" class="sr-only">Enter name or email address</label>
@@ -50,7 +50,7 @@
 					login: $('#login').val(),
 					password: $('#password').val()
 				};
-				app.loginCall(loginData);
+				app.login(loginData);
 			});
 		</script>
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>

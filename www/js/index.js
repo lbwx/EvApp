@@ -37,7 +37,7 @@ var app = {
     },
     // Update DOM on a Received Event
     receivedEvent: function() {
-        $('main').show();
+        $('main').removeClass('hidden');
     },
 	ajaxCall: function(action, request) {
 		$.ajax({
@@ -45,25 +45,61 @@ var app = {
 			type: 'POST',
 			data: {request: request},
 			dataType: 'json',
-			success: function (data) {
-				if(data.status === true) {
-					localStorage.setItem('token', data.token);
-					window.location.replace($('#login-form').attr('action'));					
-				} else {
-					return false;
-				}
-			},
+			success: function (data) { app.ajaxResponse(data); },
 			error: function(error) {
 				alert(JSON.stringify(error));
 			}
 		});
 	},
-	loginCall: function(loginData) {
+	ajaxResponse: function(response) {
+		if(response.status === true) {
+			switch(response.type) {
+				case 'login': app.loginResponse(response.result, response.token); break;
+				case 'loadEvents': app.loadEventResponse(response.result); break;
+			}
+		} else {
+			alert('Error, wrong response!');
+		}
+	},
+	loginResponse: function(result, token) {
+		alert(result);
+		localStorage.setItem('token', token);
+		window.location.replace($('#login-form').attr('action'));
+	},
+	loadEventResponse: function(result) {
+		var eventList;
+		result.forEach(function(event) {
+			eventList += '<tr data-event="' + event.eid + '">';
+			eventList += '<td>' + event.name + '<br><strong>' + event.start + '</strong> / ' + event.place + '</td>';
+			eventList += '<td class="info"><i class="icon icon-list"></i></td>';
+			eventList += '<td><strong>' + event.invited + '</strong> Gäste geladen<br>' + event.checked + ' Gäste eingecheckt (' + Math.round(100 * parseInt(event.checked) / parseInt(event.invited)) + '%)</td>';
+			eventList += '</tr>';
+		});
+		$('tbody').html(eventList);
+	},
+	login: function(loginData) {
 		var request = {
 			action: 'login',
 			data: JSON.stringify(loginData),
 			device: JSON.stringify(device)
 		};
 		app.ajaxCall('login', request);
+	},
+	loadEvents: function() {
+		var request = {
+			action: 'loadEvents',
+			data: JSON.stringify({token: localStorage.getItem('token')}),
+			device: JSON.stringify(device)
+		};
+		app.ajaxCall('login', request);
+		alert('load events');
 	}
 };
+
+$(function(){
+	$('.icon-logo').click(function(){
+		alert('Logged out');
+		localStorage.removeItem('token');
+		window.location.replace('index.html');
+	});
+});
