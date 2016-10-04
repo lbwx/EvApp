@@ -25,13 +25,13 @@ main {
 .icon-logo {
 	width: 1.5em;
 	height: 1.5em;
-	background-image: url('res/icon/android/emicon-144x144.png');
+	background-image: url(../res/icon/android/emicon-144x144.png);
 }
 .icon-list {
 	width: 2em;
 	height: 2.5em;
 	background-color: #003b5d;
-	background-image: url('res/icon/app/List-white.png');
+	background-image: url(../res/icon/app/List-white.png);
 }
 h1 {
 	display: inline-block;
