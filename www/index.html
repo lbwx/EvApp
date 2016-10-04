@@ -19,8 +19,8 @@
 			</div>
 		</header>
 
-		<main class="container hidden">
-			<form id="login-form" action="eventList.html" class="form-horizontal col-sm-10">
+		<main id="page-login" class="container hidden">
+			<form id="login-form" class="form-horizontal col-sm-10">
 				<div class="form-group">
 					<label for="login" class="sr-only">Enter name or email address</label>
 					<input type="text" class="form-control" id="login" name="login" placeholder="Enter name or e-mail" value="AdminWX">
@@ -36,6 +36,14 @@
 					<button id="login-submit" type="submit" class="btn btn-primary pull-right">LogIn</button>
 				</div>
 			</form>
+		</main>
+
+		<main id="page-event-list" class="container hidden">
+			<table class="table table-responsive table-striped table-condensed">
+				<tbody>
+					<tr style="height: 10em;"><td>loading...</td></tr>
+				</tbody>
+			</table>
 		</main>
 		
 

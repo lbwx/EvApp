@@ -37,7 +37,7 @@ var app = {
     },
     // Update DOM on a Received Event
     receivedEvent: function() {
-        $('main').removeClass('hidden');
+        $('#page-login').removeClass('hidden');
     },
 	ajaxCall: function(action, request) {
 		$.ajax({
@@ -63,10 +63,11 @@ var app = {
 	},
 	loginResponse: function(result, token) {
 		localStorage.setItem('token', token);
-		window.location.replace($('#login-form').attr('action'));
+		$('#page-login').addClass('hidden');
+		$('#page-event-list').removeClass('hidden');
+		$(function(){ app.loadEvents(); });
 	},
 	loadEventResponse: function(result) {
-		alert('3');
 		var eventList;
 		result.forEach(function(event) {
 			eventList += '<tr data-event="' + event.eid + '">';
@@ -75,9 +76,7 @@ var app = {
 			eventList += '<td><strong>' + event.invited + '</strong> Gäste geladen<br>' + event.checked + ' Gäste eingecheckt (' + Math.round(100 * parseInt(event.checked) / parseInt(event.invited)) + '%)</td>';
 			eventList += '</tr>';
 		});
-		alert('4');
 		$('tbody').html(eventList);
-		alert('5');
 	},
 	login: function(loginData) {
 		var request = {
@@ -88,14 +87,12 @@ var app = {
 		app.ajaxCall('login', request);
 	},
 	loadEvents: function() {
-		alert('2');
 		var request = {
 			action: 'loadEvents',
 			data: JSON.stringify({token: localStorage.getItem('token')}),
 			device: JSON.stringify(device)
 		};
 		app.ajaxCall('login', request);
-		alert('load events');
 	}
 };
 
