@@ -66,19 +66,18 @@
 		<script type="text/javascript" src="js/index.js"></script>
 		<script type="text/javascript">
 			app.initialize();
+
 			$('#login-submit').click(function(e){
 				e.preventDefault();
 				app.login({login:$('#login').val(),password:$('#password').val()});
 			});
+
 			$('.icon-logo').click(function(){
-				localStorage.removeItem('token');
-				$('main').addClass('hidden');
-				$('#page-login').removeClass('hidden');
+				show.login();
 			});
+
 			$(document).on('click', '.info', function(){
 				app.openEvent($(this).parent('tr').data('event'));
-				$('main').addClass('hidden');
-				$('#page-event-detail').removeClass('hidden');
 			});
 		</script>
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>

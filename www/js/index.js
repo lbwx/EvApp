@@ -38,10 +38,9 @@ var app = {
     // Update DOM on a Received Event
     receivedEvent: function() {
 		if(localStorage.getItem('token')===null) {
-			$('#page-login').removeClass('hidden');
+			show.login();
 		} else {
-			$('#page-event-list').removeClass('hidden');
-			app.loadEvents();
+			show.eventList();
 		}
     },
 	ajaxCall: function(action, request) {
@@ -69,9 +68,7 @@ var app = {
 	},
 	loginResponse: function(result, token) {
 		localStorage.setItem('token', token);
-		$('#page-login').addClass('hidden');
-		$('#page-event-list').removeClass('hidden');
-		$(function(){ app.loadEvents(); });
+		show.eventList();
 	},
 	loadEventResponse: function(result) {
 		var eventList;
@@ -99,6 +96,7 @@ var app = {
 			guestList += '</tr>';
 		});
 		$('#page-event-detail tbody').html(guestList);
+		show.eventDetail();
 	},
 	login: function(loginData) {
 		var request = {
@@ -126,5 +124,22 @@ var app = {
 			device: JSON.stringify(device)
 		};
 		app.ajaxCall('login', request);
+	}
+};
+
+var show = {
+	login: function() {
+		localStorage.removeItem('token');
+		$('main').addClass('hidden');
+		$('#page-login').removeClass('hidden');
+	},
+	eventList: function() {
+		$('main').addClass('hidden');
+		$('#page-event-list').removeClass('hidden');
+		app.loadEvents();
+	},
+	eventDetail: function() {
+		$('main').addClass('hidden');
+		$('#page-event-detail').removeClass('hidden');
 	}
 };
