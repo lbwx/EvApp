@@ -58,7 +58,8 @@ var app = {
 			dataType: 'json',
 			success: function (data) { app.ajaxResponse(data); },
 			error: function(error) {
-				alert("ERROR: " + JSON.stringify(error));
+				alert("ERROR!");
+				$('body').html(error.responseText);
 			}
 		});
 	},
