@@ -43,15 +43,22 @@ var app = {
 			show.eventList();
 		}
     },
-	ajaxCall: function(action, request) {
+	ajaxCall: function(action, param) {
+		var request = {
+			action: action,
+			data: param,
+			device: device,
+			token: localStorage.getItem('token')
+		};
+
 		$.ajax({
-			url: 'http://eventmanager.webaholix.sk/api/' + action + '/',
+			url: 'http://eventmanager.webaholix.sk/api/',
 			type: 'POST',
-			data: {request: request},
+			data: {request: JSON.stringify(request)},
 			dataType: 'json',
 			success: function (data) { app.ajaxResponse(data); },
 			error: function(error) {
-				alert(JSON.stringify(error));
+				alert("ERROR: " + JSON.stringify(error));
 			}
 		});
 	},
@@ -99,31 +106,13 @@ var app = {
 		show.eventDetail();
 	},
 	login: function(loginData) {
-		var request = {
-			action: 'login',
-			data: JSON.stringify(loginData),
-			device: JSON.stringify(device)
-		};
-		app.ajaxCall('login', request);
+		app.ajaxCall('login', {data: JSON.stringify(loginData)});
 	},
 	loadEvents: function() {
-		var request = {
-			action: 'loadEvents',
-			data: JSON.stringify({token: localStorage.getItem('token')}),
-			device: JSON.stringify(device)
-		};
-		app.ajaxCall('login', request);
+		app.ajaxCall('loadEvents', null);
 	},
 	openEvent: function(eid) {
-		var request = {
-			action: 'eventDetail',
-			data: JSON.stringify({
-				token: localStorage.getItem('token'),
-				eid: eid
-			}),
-			device: JSON.stringify(device)
-		};
-		app.ajaxCall('login', request);
+		app.ajaxCall('eventDetail', {eid: eid});
 	},
 	changeCheckIn: function(iid) {
 		alert(iid);
