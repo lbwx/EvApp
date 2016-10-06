@@ -106,7 +106,7 @@ var app = {
 		show.eventDetail();
 	},
 	login: function(loginData) {
-		app.ajaxCall('login', {data: JSON.stringify(loginData)});
+		app.ajaxCall('login', loginData);
 	},
 	loadEvents: function() {
 		app.ajaxCall('loadEvents', null);
