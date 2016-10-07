@@ -47,6 +47,23 @@ main {
 	background-color: #75bddb;
 	background-image: url(../img/check_out.png);
 }
+
+.icon-no-vip, .icon-is-vip, .icon-info-open, .icon-info-close {
+	width: 1.5em;
+	height: 1.5em;
+}
+.icon-is-vip {
+	background-image: url(../img/vip.png);
+}
+.icon-no-vip {
+	background-image: none;
+}
+.icon-info-open {
+	background-image: url(../img/info-open.png);
+}
+.icon-info-close {
+	background-image: url(../img/info-close.png);
+}
 h1 {
 	display: inline-block;
 }

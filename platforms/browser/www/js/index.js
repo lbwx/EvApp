@@ -96,11 +96,11 @@ var app = {
 			guestList += '<tr data-iid="' + guest.iid + '">';
 			guestList += '<td>' + guest.lastname + '</td>';
 			guestList += '<td>' + guest.firstname + '</td>';
-			guestList += '<td>' + guest.title + '</td>';
+			guestList += '<td>' + ((guest.title === null) ? '' : guest.title) + '</td>';
 			guestList += '<td>' + guest.employer + '</td>';
 			guestList += '<td>' + guest.plus + '</td>';
-			guestList += '<td>' + guest.vip + '</td>';
-			guestList += '<td>+</td>';
+			guestList += '<td><i class="icon ' + (guest.vip ? 'icon-is-vip' : 'icon-no-vip') + '"></i></td>';
+			guestList += '<td><a href="javascript:app.openGuestDetail(' + guest.iid + ');"><i class="icon icon-info-open app-guest-info"></i></a></td>';
 			guestList += '<td class="app-checkin"><a href="javascript:app.changeCheckIn(' + guest.iid + ');"><i class="icon icon-' + (guest.checkin ? 'checked':'unchecked') + '"></i></a></td>';
 			guestList += '</tr>';
 		});
@@ -121,6 +121,10 @@ var app = {
 	},
 	changeCheckIn: function(iid) {
 		app.ajaxCall('changeCheckIn', {iid: iid});
+	},
+	openGuestDetail: function(iid) {
+		$('#page-event-detail tr[data-iid="' + iid + '"] .app-guest-info').toggleClass('icon-info-open');
+		$('#page-event-detail tr[data-iid="' + iid + '"] .app-guest-info').toggleClass('icon-info-close');
 	}
 };
 
