@@ -33,6 +33,20 @@ main {
 	background-color: #003b5d;
 	background-image: url(../img/list-white.png);
 }
+
+.icon-checked, .icon-unchecked {
+	width: 1.75em;
+	height: 1.5em;
+}
+
+.icon-checked {
+	background-color: #003b5c;
+	background-image: url(../img/check_in.png);
+}
+.icon-unchecked {
+	background-color: #75bddb;
+	background-image: url(../img/check_out.png);
+}
 h1 {
 	display: inline-block;
 }

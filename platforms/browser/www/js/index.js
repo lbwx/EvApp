@@ -101,14 +101,14 @@ var app = {
 			guestList += '<td>' + guest.plus + '</td>';
 			guestList += '<td>' + guest.vip + '</td>';
 			guestList += '<td>+</td>';
-			guestList += '<td class="app-checkin"><a href="javascript:app.changeCheckIn(' + guest.iid + ');">' + guest.checkin + '</a></td>';
+			guestList += '<td class="app-checkin"><a href="javascript:app.changeCheckIn(' + guest.iid + ');"><i class="icon icon-' + (guest.checkin ? 'checked':'unchecked') + '"></i></a></td>';
 			guestList += '</tr>';
 		});
 		$('#page-event-detail tbody').html(guestList);
 		show.eventDetail();
 	},
 	changeCheckInResponse: function(result) {
-		$('#page-event-detail tr[data-iid="' + result.iid + '"] .app-checkin a').text(result.value);
+		$('#page-event-detail tr[data-iid="' + result.iid + '"] .app-checkin a').html('<i class="icon icon-' + (result.checkIn ? 'checked':'unchecked') + '"></i>');
 	},
 	login: function(loginData) {
 		app.ajaxCall('login', loginData);
