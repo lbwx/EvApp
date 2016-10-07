@@ -116,7 +116,7 @@ var app = {
 		app.ajaxCall('eventDetail', {eid: eid});
 	},
 	changeCheckIn: function(iid) {
-		alert(iid);
+		app.ajaxCall('changeCheckIn', {iid: iid});
 	}
 };
 
