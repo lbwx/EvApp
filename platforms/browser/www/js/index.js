@@ -69,6 +69,7 @@ var app = {
 				case 'login': app.loginResponse(response.result, response.token); break;
 				case 'loadEvents': app.loadEventResponse(response.result); break;
 				case 'eventDetail': app.eventDetailResponse(response.result); break;
+				case 'changeCheckIn': app.changeCheckInResponse(response.result); break;
 			}
 		} else {
 			alert('Error, wrong response!');
@@ -100,11 +101,14 @@ var app = {
 			guestList += '<td>' + guest.plus + '</td>';
 			guestList += '<td>' + guest.vip + '</td>';
 			guestList += '<td>+</td>';
-			guestList += '<td><a href="javascript:app.changeCheckIn(' + guest.iid + ');">' + guest.checkin + '</a></td>';
+			guestList += '<td class="app-checkin"><a href="javascript:app.changeCheckIn(' + guest.iid + ');">' + guest.checkin + '</a></td>';
 			guestList += '</tr>';
 		});
 		$('#page-event-detail tbody').html(guestList);
 		show.eventDetail();
+	},
+	changeCheckInResponse: function(result) {
+		$('#page-event-detail tr[data-iid="' + result.iid + '"] .app-checkin a').text(result.value);
 	},
 	login: function(loginData) {
 		app.ajaxCall('login', loginData);
