@@ -95,9 +95,7 @@ var app = {
 		var guestList;
 		result.forEach(function(guest){
 			guestList += '<tr data-iid="' + guest.iid + '">';
-			guestList += '<td>' + guest.lastname + '</td>';
-			guestList += '<td>' + guest.firstname + '</td>';
-			guestList += '<td>' + ((guest.title === null) ? '' : guest.title) + '</td>';
+			guestList += '<td>' + ((guest.title === null) ? '' : guest.title + ' ') + guest.firstname + ' ' + guest.lastname + '</td>';
 			guestList += '<td>' + guest.employer + '</td>';
 			guestList += '<td>' + guest.plus + '</td>';
 			guestList += '<td><i class="icon ' + (guest.vip ? 'icon-is-vip' : 'icon-no-vip') + '"></i></td>';
