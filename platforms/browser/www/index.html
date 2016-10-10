@@ -15,12 +15,10 @@
 			<div class="container-fluid">
 				<div class="navbar-header">
 					<h1><i class="icon icon-logo" onclick="show.login();"></i>Event manager</h1>
-					<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#app-info">Open modal</button>
 				</div>
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href="javascript:show.eventList();">test</a></li>
-						<li><button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#app-info">Open modal</button></li>
 					</ul>
 				</div>
 			</div>
@@ -54,14 +52,14 @@
 			<table class="table table-responsive table-striped table-condensed">
 				<thead>
 					<tr>
-						<th>Nachname</th>
-						<th>Vorname</th>
-						<th>Titel</th>
-						<th>Institution</th>
-						<th>Plus</th>
-						<th>VIP</th>
-						<th>Info</th>
-						<th>Check-In</th>
+						<th class="col-md-2">Nachname</th>
+						<th class="col-md-2">Vorname</th>
+						<th class="col-md-2">Titel</th>
+						<th class="col-md-2">Institution</th>
+						<th class="col-md-1"><i class="icon icon-plus-guests"></i></th>
+						<th class="col-md-1">VIP</th>
+						<th class="col-md-1">Info</th>
+						<th class="col-md-1">Check-In</th>
 					</tr>
 				</thead>
 				<tbody><tr><td colspan="8">Loading..</td></tr></tbody>
@@ -79,7 +77,6 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-primary">Save changes</button>
 					</div>
 				</div>
 			</div>

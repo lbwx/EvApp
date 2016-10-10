@@ -70,6 +70,7 @@ var app = {
 				case 'loadEvents': app.loadEventResponse(response.result); break;
 				case 'eventDetail': app.eventDetailResponse(response.result); break;
 				case 'changeCheckIn': app.changeCheckInResponse(response.result); break;
+				case 'guestDetail': app.guestDetailResponse(response.result); break;
 			}
 		} else {
 			alert('Error, wrong response!');
@@ -100,7 +101,7 @@ var app = {
 			guestList += '<td>' + guest.employer + '</td>';
 			guestList += '<td>' + guest.plus + '</td>';
 			guestList += '<td><i class="icon ' + (guest.vip ? 'icon-is-vip' : 'icon-no-vip') + '"></i></td>';
-			guestList += '<td><a href="javascript:app.openGuestDetail(' + guest.iid + ');"><i class="icon icon-info-open app-guest-info"></i></a></td>';
+			guestList += '<td><a href="javascript:app.openGuestDetail(' + guest.iid + ');"><i class="icon icon-info-open"></i></a></td>';
 			guestList += '<td class="app-checkin"><a href="javascript:app.changeCheckIn(' + guest.iid + ');"><i class="icon icon-' + (guest.checkin ? 'checked':'unchecked') + '"></i></a></td>';
 			guestList += '</tr>';
 		});
@@ -109,6 +110,11 @@ var app = {
 	},
 	changeCheckInResponse: function(result) {
 		$('#page-event-detail tr[data-iid="' + result.iid + '"] .app-checkin a').html('<i class="icon icon-' + (result.checkIn ? 'checked':'unchecked') + '"></i>');
+	},
+	guestDetailResponse: function(result) {
+		$('#app-info .modal-title').html(result.header);
+		$('#app-info .modal-body').html(createHtml.guestDetail(result));
+		$('#app-info').modal('show');
 	},
 	login: function(loginData) {
 		app.ajaxCall('login', loginData);
@@ -123,8 +129,40 @@ var app = {
 		app.ajaxCall('changeCheckIn', {iid: iid});
 	},
 	openGuestDetail: function(iid) {
-		$('#page-event-detail tr[data-iid="' + iid + '"] .app-guest-info').toggleClass('icon-info-open');
-		$('#page-event-detail tr[data-iid="' + iid + '"] .app-guest-info').toggleClass('icon-info-close');
+		app.ajaxCall('guestDetail', {iid: iid});
+	}
+};
+
+var createHtml = {
+	guestDetail: function (data) {
+		var structure = [
+			['name: ', data.title + ' ' + data.firstName + ' ' + data.lastName],
+			[data.employer, data.plus]
+		];
+		return this.tableStructure(structure);
+	},
+	tableStructure: function(structure) {
+		var rows = '';
+		structure.forEach(function(row){
+			var cols = '';
+			row.forEach(function(col){
+				cols += createHtml.wrapTd(col);
+			});
+			rows += createHtml.wrapTr(cols);
+		});
+		return createHtml.wrapTable(rows);
+	},
+	wrapTable: function(content){
+		return '<table class="table table-responsive">' + content + '</table>';
+	},
+	wrapTr: function(content){
+		return '<tr>' + content + '</tr>';
+	},
+	wrapTd: function(content) {
+		return '<td>' + content + '</td>';
+	},
+	wrapByElement: function(con,ele,cla) {
+		return '<' + ele + ((cla !== null) ? ' class="' + cla + '"' : '') + '>' + con + '</' + ele + '>';
 	}
 };
 
