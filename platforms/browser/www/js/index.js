@@ -110,7 +110,7 @@ var app = {
 		$('#page-event-detail tr[data-iid="' + result.iid + '"] .app-checkin a').html('<i class="icon icon-' + (result.checkIn ? 'checked':'unchecked') + '"></i>');
 	},
 	guestDetailResponse: function(result) {
-		$('#app-info .modal-title').html(result.header);
+		$('#app-info .modal-title').html((result.vip?'(VIP) ':'') + result.header + ((parseInt(result.plus)>0)?' + '+result.plus+' person':''));
 		$('#app-info .modal-body').html(createHtml.guestDetail(result));
 		$('#app-info').modal('show');
 	},
@@ -134,8 +134,10 @@ var app = {
 var createHtml = {
 	guestDetail: function (data) {
 		var structure = [
-			['name: ', data.title + ' ' + data.firstName + ' ' + data.lastName],
-			[data.employer, data.plus]
+			['Company: ', data.employer],
+			['Phone: ', data.phone],
+			['Mobile:', data.mphone],
+			['E-mail', data.email]
 		];
 		return this.tableStructure(structure);
 	},
