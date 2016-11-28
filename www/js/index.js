@@ -165,20 +165,72 @@ var createHtml = {
 		return '<' + ele + ((cla !== null) ? ' class="' + cla + '"' : '') + '>' + con + '</' + ele + '>';
 	}
 };
+//-------------------------------------------------------------------
+var em = {
+	ApiUrl: 'http://eventmanager.webaholix.sk/api/',
+	ajaxRequest: function (data) {
+		var request = {
+			data: data.param,
+			token: localStorage.getItem('token')
+		};
 
+		$.ajax({
+			url: this.ApiUrl + data.action,
+			type: 'POST',
+			data: request,
+			dataType: 'json',
+			success: data.response,
+			error: function(error) {
+				$('#app-error').html(error.responseText);
+				show.error();
+			}
+		});
+	},
+	loadEvents: function() {
+		this.ajaxRequest({
+			action: 'get-events',
+			response: this.loadEventsResponse
+		});
+	},
+	loadEventsResponse: function(response) {
+		if(response.status) {
+			$("#app-event-list tbody tr").first().siblings().remove();
+			var template = $("#app-event-list tbody").clone();
+			template.children().removeClass('hidden');
+			response.result.forEach(function(event){
+				template.find('.var-event-name').html(event.name);
+				template.find('.var-event-start').html(event.start);
+				template.find('.var-event-end').html(event.end);
+				template.find('.var-event-place').html(event.place);
+				$("#app-event-list tbody").append(template.html());
+			});
+			show.eventList();
+		} else {
+			alert(response.error);
+		}
+	}
+};
+//-------------------------------------------------------------------
 var show = {
+	hideAll: function() {
+		$("main").children('div').addClass('hidden');
+	},
+	error: function() {
+		this.hideAll();
+		$('#app-error').removeClass('hidden');
+	},
 	login: function() {
+		this.hideAll();
 		localStorage.removeItem('token');
-		$('main').addClass('hidden');
 		$('#page-login').removeClass('hidden');
 	},
 	eventList: function() {
-		$('main').addClass('hidden');
-		$('#page-event-list').removeClass('hidden');
+		this.hideAll();
+		$('#app-event-list').removeClass('hidden');
 		app.loadEvents();
 	},
 	eventDetail: function() {
-		$('main').addClass('hidden');
+		this.hideAll();
 		$('#page-event-detail').removeClass('hidden');
 	}
 };

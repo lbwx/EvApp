@@ -18,48 +18,86 @@
 				</div>
 				<ul class="nav navbar-nav navbar-right">
 					<li><a class="btn btn-primary" href="javascript:show.eventList();">Show Events</a></li>
+					<li><a class="btn btn-primary" href="javascript:show.eventList();">Logout</a></li>
 				</ul>
 			</div>
 		</header>
-		<main id="page-login" class="container hidden">
-			<form id="login-form" class="form-horizontal col-sm-10">
-				<div class="form-group">
-					<label for="login" class="sr-only">Enter name or email address</label>
-					<input type="text" class="form-control" id="login" name="login" placeholder="Enter name or e-mail" value="AdminWX">
-				</div>
-				<div class="form-group">
-					<label for="password" class="sr-only">Enter password</label>
-					<input type="password" class="form-control" id="password" name="password" placeholder="Enter password" value="hei3h6nsd">
-				</div>
-				<div class="form-group">
-					<label><input type="checkbox" class="checkbox-inline" name="remember">&nbsp;Remember me!</label>
-				</div>
-				<div>
-					<button id="login-submit" type="submit" class="btn btn-primary pull-right">LogIn</button>
-				</div>
-			</form>
-		</main>
-		<main id="page-event-list" class="container hidden">
-			<table class="table table-responsive table-striped table-condensed">
-				<tbody>
-					<tr style="height: 10em;"><td>loading...</td></tr>
-				</tbody>
-			</table>
-		</main>
-		<main id="page-event-detail" class="container hidden">
-			<table class="table table-responsive table-striped table-condensed">
-				<thead>
-					<tr>
-						<th>Name</th>
-						<th>Institution</th>
-						<th><i class="icon icon-plus-guests"></i></th>
-						<th>VIP</th>
-						<th>Info</th>
-						<th>Check-In</th>
-					</tr>
-				</thead>
-				<tbody><tr><td colspan="8">Loading..</td></tr></tbody>
-			</table>
+		<main class="container">
+			<div id="page-login" class="hidden">
+				<form id="login-form" class="form-horizontal col-sm-10">
+					<div class="form-group">
+						<label for="login" class="sr-only">Enter name or email address</label>
+						<input type="text" class="form-control" id="login" name="login" placeholder="Enter name or e-mail" value="AdminWX">
+					</div>
+					<div class="form-group">
+						<label for="password" class="sr-only">Enter password</label>
+						<input type="password" class="form-control" id="password" name="password" placeholder="Enter password" value="hei3h6nsd">
+					</div>
+					<div class="form-group">
+						<label><input type="checkbox" class="checkbox-inline" name="remember">&nbsp;Remember me!</label>
+					</div>
+					<div>
+						<button id="login-submit" type="submit" class="btn btn-primary pull-right">LogIn</button>
+					</div>
+				</form>				
+			</div>
+			<div id="page-event-list" class="hidden">
+				<table class="table table-responsive table-striped table-condensed">
+					<tbody>
+						<tr style="height: 10em;"><td>loading...</td></tr>
+					</tbody>
+				</table>
+			</div>
+			
+			
+			<div id="app-event-list">
+			<!--[L:]
+				First TR is "template" do not remove class="hidden"
+				here we can change style or structure of event-item
+				"var-*" classes are required for my templating system!
+			-->
+				<table class="table table-responsive table-striped table-condensed">
+					<tbody>
+						<tr class="hidden">
+							<td>
+								<span class="var-event-name"></span>
+								<br>
+								<strong class="var-event-start"></strong>
+								/
+								<strong class="var-event-end"></strong>
+								<br>
+								<span class="var-event-place"></span>
+							</td>
+							<td>
+								<button class="btn btn-link" onclick="alert('test');">click me</button>
+							</td>
+							<td>
+								test text
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<button onclick="em.loadEvents();">test</button>
+			</div>
+
+			<div id="page-event-detail" class="hidden">
+				<table class="table table-responsive table-striped table-condensed">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Institution</th>
+							<th><i class="icon icon-plus-guests"></i></th>
+							<th>VIP</th>
+							<th>Info</th>
+							<th>Check-In</th>
+						</tr>
+					</thead>
+					<tbody><tr><td colspan="8">Loading..</td></tr></tbody>
+				</table>
+			</div>
+			<div id="app-error">
+				
+			</div>
 		</main>
 		<div id="app-info" class="modal fade" tabindex="-1" role="dialog">
 			<div class="modal-dialog" role="document">
