@@ -40,140 +40,41 @@ var app = {
 		if(localStorage.getItem('token')===null) {
 			show.login();
 		} else {
-			show.eventList();
+			em.loadEvents();
 		}
-    },
-	ajaxCall: function(action, param) {
-		var request = {
-			action: action,
-			data: param,
-			device: device,
-			token: localStorage.getItem('token')
-		};
-
-		$.ajax({
-			url: 'http://eventmanager.webaholix.sk/api/',
-			type: 'POST',
-			data: {request: JSON.stringify(request)},
-			dataType: 'json',
-			success: function (data) { app.ajaxResponse(data); },
-			error: function(error) {
-				alert("ERROR!");
-				$('body').html(error.responseText);
-			}
-		});
-	},
-	ajaxResponse: function(response) {
-		if(response.status === true) {
-			switch(response.type) {
-				case 'login': app.loginResponse(response.result, response.token); break;
-				case 'loadEvents': app.loadEventResponse(response.result); break;
-				case 'eventDetail': app.eventDetailResponse(response.result); break;
-				case 'changeCheckIn': app.changeCheckInResponse(response.result); break;
-				case 'guestDetail': app.guestDetailResponse(response.result); break;
-			}
-		} else {
-			alert('Error, wrong response!');
-		}
-	},
-	loginResponse: function(result, token) {
-		localStorage.setItem('token', token);
-		show.eventList();
-	},
-	loadEventResponse: function(result) {
-		var eventList;
-		result.forEach(function(event) {
-			eventList += '<tr data-event="' + event.eid + '">';
-			eventList += '<td>' + event.name + '<br><strong>' + event.start + '</strong> / ' + event.place + '</td>';
-			eventList += '<td class="info"><a href="javascript:app.openEvent('+event.eid+');"><i class="icon icon-list"></i></a></td>';
-			eventList += '<td><strong>' + event.invited + '</strong> Gäste geladen<br>' + event.checked + ' Gäste eingecheckt (' + Math.round(100 * parseInt(event.checked) / parseInt(event.invited)) + '%)</td>';
-			eventList += '</tr>';
-		});
-		$('#page-event-list tbody').html(eventList);
-	},
-	eventDetailResponse: function(result) {
-		var guestList;
-		result.forEach(function(guest){
-			guestList += '<tr data-iid="' + guest.iid + '">';
-			guestList += '<td>' + ((guest.title === null) ? '' : guest.title + ' ') + guest.firstname + ' ' + guest.lastname + '</td>';
-			guestList += '<td>' + guest.employer + '</td>';
-			guestList += '<td>' + guest.plus + '</td>';
-			guestList += '<td><i class="icon ' + (guest.vip ? 'icon-is-vip' : 'icon-no-vip') + '"></i></td>';
-			guestList += '<td><a href="javascript:app.openGuestDetail(' + guest.iid + ');"><i class="icon icon-info-open"></i></a></td>';
-			guestList += '<td class="app-checkin"><a href="javascript:app.changeCheckIn(' + guest.iid + ');"><i class="icon icon-' + (guest.checkin ? 'checked':'unchecked') + '"></i></a></td>';
-			guestList += '</tr>';
-		});
-		$('#page-event-detail tbody').html(guestList);
-		show.eventDetail();
-	},
-	changeCheckInResponse: function(result) {
-		$('#page-event-detail tr[data-iid="' + result.iid + '"] .app-checkin a').html('<i class="icon icon-' + (result.checkIn ? 'checked':'unchecked') + '"></i>');
-	},
-	guestDetailResponse: function(result) {
-		$('#app-info .modal-title').html((result.vip?'(VIP) ':'') + result.header + ((parseInt(result.plus)>0)?' + '+result.plus+' person':''));
-		$('#app-info .modal-body').html(createHtml.guestDetail(result));
-		$('#app-info').modal('show');
-	},
-	login: function(loginData) {
-		app.ajaxCall('login', loginData);
-	},
-	loadEvents: function() {
-		app.ajaxCall('loadEvents', null);
-	},
-	openEvent: function(eid) {
-		app.ajaxCall('eventDetail', {eid: eid});
-	},
-	changeCheckIn: function(iid) {
-		app.ajaxCall('changeCheckIn', {iid: iid});
-	},
-	openGuestDetail: function(iid) {
-		app.ajaxCall('guestDetail', {iid: iid});
-	}
+    }
 };
 
-var createHtml = {
-	guestDetail: function (data) {
-		var structure = [
-			['Company: ', data.employer],
-			['Phone: ', data.phone],
-			['Mobile:', data.mphone],
-			['E-mail', data.email]
-		];
-		return this.tableStructure(structure);
-	},
-	tableStructure: function(structure) {
-		var rows = '';
-		structure.forEach(function(row){
-			var cols = '';
-			row.forEach(function(col){
-				cols += createHtml.wrapTd(col);
-			});
-			rows += createHtml.wrapTr(cols);
-		});
-		return createHtml.wrapTable(rows);
-	},
-	wrapTable: function(content){
-		return '<table class="table table-responsive">' + content + '</table>';
-	},
-	wrapTr: function(content){
-		return '<tr>' + content + '</tr>';
-	},
-	wrapTd: function(content) {
-		return '<td>' + content + '</td>';
-	},
-	wrapByElement: function(con,ele,cla) {
-		return '<' + ele + ((cla !== null) ? ' class="' + cla + '"' : '') + '>' + con + '</' + ele + '>';
-	}
+var AppConst = {
+	checkin: [
+		{
+			icon: 'fa-question',
+			btn: 'btn-info'
+		},
+		{
+			icon: 'fa-thumbs-o-up',
+			btn: 'btn-success'
+		},
+		{
+			icon: 'fa-thumbs-o-down',
+			btn: 'btn-warning'
+		}
+	]
 };
+
+
 //-------------------------------------------------------------------
 var em = {
 	ApiUrl: 'http://eventmanager.webaholix.sk/api/',
+	GuestOrdering: 'ASC',
+	GuestLimit: 10,
+	GuestOffset: 0,
 	ajaxRequest: function (data) {
-		var request = {
-			data: data.param,
-			token: localStorage.getItem('token')
-		};
-
+		var request = {};
+		if(data.request !== undefined) {
+			request = data.request;
+		}
+		request.token = localStorage.getItem('token');
 		$.ajax({
 			url: this.ApiUrl + data.action,
 			type: 'POST',
@@ -194,22 +95,117 @@ var em = {
 	},
 	loadEventsResponse: function(response) {
 		if(response.status) {
-			$("#app-event-list tbody tr").first().siblings().remove();
-			var template = $("#app-event-list tbody").clone();
-			template.children().removeClass('hidden');
+			$("#app-event-list-content").html('');
 			response.result.forEach(function(event){
-				template.find('.var-event-name').html(event.name);
-				template.find('.var-event-start').html(event.start);
-				template.find('.var-event-end').html(event.end);
-				template.find('.var-event-place').html(event.place);
-				$("#app-event-list tbody").append(template.html());
+				var eventRow = $('#app-event-list-template').clone();
+				eventRow.find('.var-event-name').html(event.name);
+				eventRow.find('.var-event-start').html(event.start);
+				eventRow.find('.var-event-end').html(event.end);
+				eventRow.find('.var-event-place').html(event.place);
+				eventRow.find('.var-event-id').val(event.eid);
+				eventRow.find('.var-event-invited').html(event.invited);
+				eventRow.find('.var-event-checked').html(event.checked);
+				eventRow.find('.var-event-percentage').html(Math.round(100 * parseInt(event.checked) / parseInt(event.invited)));
+				$("#app-event-list-content").append(eventRow.html());
 			});
 			show.eventList();
 		} else {
 			alert(response.error);
 		}
+	},
+	openEvent: function(element) {
+		this.GuestLimit = 10;
+		this.ajaxRequest({
+			action: 'open-event',
+			request: {
+				eid: element.val(),
+				ordering: this.GuestOrdering,
+				limit: this.GuestLimit,
+				offset: this.GuestOffset
+			},
+			response: this.openEventResponse
+		});
+		
+	},
+	openEventResponse: function(response) {
+		if(response.status) {
+			$('#app-event-open').find('.var-event-name').html(response.event);
+			$("#app-event-open-content").html('');
+			response.guests.forEach(function(guest){
+				var guestRow = $('#app-event-open-template').clone();
+				guestRow.children('tr').attr('data-iid', guest.id);
+				guestRow.find('.var-guest-name').html(guest.firstName + " " + guest.lastName);
+				guestRow.find('.var-guest-employer').html(guest.employer);
+				guestRow.find('.var-guest-plus').html(guest.plus);
+				guestRow.find('.var-guest-vip').addClass(((guest.vip) ? 'icon-is-vip' : 'icon-no-vip'));
+				guestRow.find('.var-guest-checkin').addClass(AppConst.checkin[guest.checkin].icon);
+				guestRow.find('.var-guest-checkin').parent().addClass(AppConst.checkin[guest.checkin].btn);
+				$("#app-event-open-content").append(guestRow.html());
+			});
+			show.eventOpen();
+		} else {
+			alert(response.error);
+		}
+	},
+	guestDetail: function(iid) {
+		this.ajaxRequest({
+			action: 'guest-detail',
+			request: {'iid': iid},
+			response: this.guestDetailResponse
+		});
+	},
+	guestDetailResponse: function(response) {
+		if(response.status) {
+			var template = $('#app-template-guest-detail').clone();
+			template.find('.var-guestdetail-name').html(response.guest.title + " " + response.guest.firstName + " " + response.guest.lastName);
+			template.find('.var-guestdetail-employer').html(response.guest.employer);
+			template.find('.var-guestdetail-plus').html(response.guest.plus);
+			template.find('.var-guestdetail-email').html(response.guest.email);
+			template.find('.var-guestdetail-detail').html(response.guest.detail);
+			$('#app-info').html(template.html());
+			$('#app-info').modal('show');			
+		} else {
+			alert('error');
+		}
+	},
+	checkGuest: function(iid) {
+		this.ajaxRequest({
+			action: 'guest-check',
+			request: {iid: iid},
+			response: this.checkGuestResponse
+		});
+	},
+	checkGuestResponse: function(response) {
+		if(response.status) {
+			var button = $('#app-event-open-content tr[data-iid="' + response.iid + '"] .var-guest-checkin');
+			button.attr('class', 'var-guest-checkin icon fa');
+			button.addClass(AppConst.checkin[response.checkin].icon);
+			button.parent().attr('class', 'btn');
+			button.parent().addClass(AppConst.checkin[response.checkin].btn);
+		}
+	},
+	login: function(formdata) {
+		formdata.push({name: 'device', value: JSON.stringify(device)});
+		this.ajaxRequest({
+			action: 'login',
+			request: formdata,
+			response: this.loginResponse
+		});
+	},
+	loginResponse: function(response) {
+		if(response.status) {
+			localStorage.setItem('token', response.token);
+			em.loadEvents();
+		} else {
+			alert(response.error);
+		}
+	},
+	logout: function() {
+		localStorage.removeItem('token');
+		show.login();
 	}
 };
+
 //-------------------------------------------------------------------
 var show = {
 	hideAll: function() {
@@ -221,16 +217,18 @@ var show = {
 	},
 	login: function() {
 		this.hideAll();
-		localStorage.removeItem('token');
-		$('#page-login').removeClass('hidden');
+		$('.app-nav').addClass('hidden');
+		$('#app-login').removeClass('hidden');
 	},
 	eventList: function() {
 		this.hideAll();
+		$('.app-nav-eventlist').addClass('hidden');
+		$('.app-nav-logout').removeClass('hidden');
 		$('#app-event-list').removeClass('hidden');
-		app.loadEvents();
 	},
-	eventDetail: function() {
+	eventOpen: function() {
 		this.hideAll();
-		$('#page-event-detail').removeClass('hidden');
+		$('.app-nav-eventlist').removeClass('hidden');
+		$('#app-event-open').removeClass('hidden');
 	}
 };

@@ -7,6 +7,7 @@
 		<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
 		<meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
 		<link rel="stylesheet" type="text/css" href="css/index.css" />
+		<link rel="stylesheet" type="text/css" href="fa/css/font-awesome.min.css" />
 		<link href="css/bootstrap.min.css" rel="stylesheet">
 		<title>Event Manager</title>
 	</head>
@@ -14,17 +15,18 @@
 		<header class="navbar navbar-static-top">
 			<div class="container-fluid">
 				<div class="navbar-header">
-					<h1><i class="icon icon-logo" onclick="show.login();"></i>Event manager</h1>
+					<h1><i class="icon icon-logo"></i>Event manager</h1>
 				</div>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a class="btn btn-primary" href="javascript:show.eventList();">Show Events</a></li>
-					<li><a class="btn btn-primary" href="javascript:show.eventList();">Logout</a></li>
+					<li><a class="app-nav app-nav-eventlist btn btn-primary hidden" onclick="em.loadEvents();">Show Events</a></li>
+					<li><a class="app-nav app-nav-logout btn btn-primary hidden" onclick="em.logout();">Logout</a></li>
 				</ul>
 			</div>
 		</header>
 		<main class="container">
-			<div id="page-login" class="hidden">
-				<form id="login-form" class="form-horizontal col-sm-10">
+			<!-- Login page -->
+			<div id="app-login" class="hidden">
+				<form id="login-form" class="form-horizontal col-sm-10" onsubmit="em.login($(this).serializeArray());">
 					<div class="form-group">
 						<label for="login" class="sr-only">Enter name or email address</label>
 						<input type="text" class="form-control" id="login" name="login" placeholder="Enter name or e-mail" value="AdminWX">
@@ -37,28 +39,19 @@
 						<label><input type="checkbox" class="checkbox-inline" name="remember">&nbsp;Remember me!</label>
 					</div>
 					<div>
-						<button id="login-submit" type="submit" class="btn btn-primary pull-right">LogIn</button>
+						<button type="submit" class="btn btn-primary pull-right">LogIn</button>
 					</div>
 				</form>				
 			</div>
-			<div id="page-event-list" class="hidden">
+			<!-- EventList page -->
+			<div id="app-event-list" class="hidden">
 				<table class="table table-responsive table-striped table-condensed">
-					<tbody>
-						<tr style="height: 10em;"><td>loading...</td></tr>
-					</tbody>
-				</table>
-			</div>
-			
-			
-			<div id="app-event-list">
-			<!--[L:]
-				First TR is "template" do not remove class="hidden"
-				here we can change style or structure of event-item
-				"var-*" classes are required for my templating system!
-			-->
-				<table class="table table-responsive table-striped table-condensed">
-					<tbody>
-						<tr class="hidden">
+					<!--[L:]
+						First tbody is "template" and here we can change style or structure of event-item
+						"var-*" classes are required for my templating system!
+					-->
+					<tbody id="app-event-list-template" class="hidden">
+						<tr>
 							<td>
 								<span class="var-event-name"></span>
 								<br>
@@ -69,18 +62,41 @@
 								<span class="var-event-place"></span>
 							</td>
 							<td>
-								<button class="btn btn-link" onclick="alert('test');">click me</button>
+								<button class="btn btn-link var-event-id" onclick="em.openEvent($(this));"><i class="icon icon-list"></i></button>
 							</td>
 							<td>
-								test text
+								<span class="var-event-invited"></span>&nbsp;G&auml;ste geladen<br>
+								<span class="var-event-checked"></span>&nbsp;G&auml;ste eingecheckt(<span class="var-event-percentage"></span>&percnt;)
 							</td>
 						</tr>
 					</tbody>
+					<tbody id="app-event-list-content"></tbody>
 				</table>
-				<button onclick="em.loadEvents();">test</button>
 			</div>
-
-			<div id="page-event-detail" class="hidden">
+			<!-- EventOpen page -->
+			<div id="app-event-open" class="hidden">
+				<div id="app-event-filter">
+					<div class="col-sm-3">
+						<span class="var-event-name"></span>
+					</div>
+					<div class="col-sm-3">
+						<input type="text" name="search" class="form-control" placeholder="Search">
+					</div>
+					<div class="col-sm-2">
+						<select name="filter" class="form-control">
+							<option value="0">Filter</option>
+							<option value="1">Anwesend</option>
+							<option value="2">Abwesend</option>
+							<option value="3">VIP</option>
+							<option value="4">No VIP</option>
+						</select>
+					</div>
+					<div class="col-sm-4">
+						<button class="btn btn-default">Alle anzeigen</button>
+						<button class="btn btn-default">Gast anlegen</button>
+						<button class="btn btn-default">Liste drucken</button>
+					</div>
+				</div>
 				<table class="table table-responsive table-striped table-condensed">
 					<thead>
 						<tr>
@@ -92,12 +108,42 @@
 							<th>Check-In</th>
 						</tr>
 					</thead>
-					<tbody><tr><td colspan="8">Loading..</td></tr></tbody>
+					<!--[L:]
+						First tbody is "template" and here we can change style or structure of event-item
+						"var-*" classes are required for my templating system!
+					-->
+					<tbody id="app-event-open-template" class="hidden">
+						<tr data-iid="?">
+							<td>
+								<span class="btn var-guest-name"></span>
+							</td>
+							<td>
+								<span class="btn var-guest-employer"></span>
+							</td>
+							<td>
+								<span class="btn var-guest-plus"></span>
+							</td>
+							<td>
+								<span class="btn">
+									<i class="var-guest-vip icon"></i>
+								</span>
+							</td>
+							<td>
+								<button class="btn btn-link" onclick="em.guestDetail($(this).closest('tr').data('iid'));">
+									<i class="icon icon-info-open"></i>
+								</button>
+							</td>
+							<td>
+								<button class="btn" onclick="em.checkGuest($(this).closest('tr').data('iid'));">
+									<i class="var-guest-checkin icon fa"></i>
+								</button>
+							</td>
+						</tr>
+					</tbody>
+					<tbody id="app-event-open-content"></tbody>
 				</table>
 			</div>
-			<div id="app-error">
-				
-			</div>
+			<div id="app-error" class="hidden"></div>
 		</main>
 		<div id="app-info" class="modal fade" tabindex="-1" role="dialog">
 			<div class="modal-dialog" role="document">
@@ -115,17 +161,37 @@
 				</div>
 			</div>
 		</div>
+		<!-- Templates -->
+		<div id="app-template-guest-detail" class="hidden">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Guest Detail</h4>
+					</div>
+					<div class="modal-body">
+						<span class="var-guestdetail-name"></span><br>
+						<span class="var-guestdetail-employer"></span><br>
+						<span class="var-guestdetail-plus"></span><br>
+						<span class="var-guestdetail-email"></span><br>
+						<span class="var-guestdetail-detail"></span>
+					</div>
+					<div class="modal-footer">
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+		
 		
 		<script type="text/javascript" src="js/jquery-3.0.0.min.js"></script>
 		<script type="text/javascript" src="cordova.js"></script>
 		<script type="text/javascript" src="js/index.js"></script>
 		<script type="text/javascript">
 			app.initialize();
-
-			$('#login-submit').click(function(e){
-				e.preventDefault();
-				app.login({login:$('#login').val(),password:$('#password').val()});
-			});
+			$('#login-form').submit(function(e){ e.preventDefault(); });
 		</script>
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	</body>

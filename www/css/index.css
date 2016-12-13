@@ -40,11 +40,9 @@ main {
 }
 
 .icon-checked {
-	background-color: #003b5c;
 	background-image: url(../img/check-in.png);
 }
 .icon-unchecked {
-	background-color: #75bddb;
 	background-image: url(../img/check-out.png);
 }
 
