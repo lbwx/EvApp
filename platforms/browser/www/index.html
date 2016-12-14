@@ -15,33 +15,35 @@
 		<header>
 			<nav class="navbar navbar-static-top insert-logo">
 				<div class="container-fluid">
-					<div class="navbar-header">
-						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-							<i class="fa fa-gear fa-spin fa-2x"></i>
-						</button>
-						<button type="button" class="navbar-toggle hidden app-nav app-nav-eventlist" onclick="em.loadEvents();">
-							<i class="fa fa-chevron-circle-left fa-2x"></i>
-						</button>
-					</div>
-					<div class="collapse navbar-collapse" id="myNavbar">
-						<ul class="nav navbar-nav navbar-right text-right">
-							<li>
-								<select class="btn navbar-btn btn-primary fixed-width-10" id="app-lang-select" name="language" onchange="app.translate($(this).val());">
-									<option value="en">English</option>
-									<option value="de">Deutsch</option>
-									<option value="sk">Slovenčina</option>
-								</select>
-							</li>
-							<li>
-								<button class="btn navbar-btn btn-warning fixed-width-10" onclick="em.logout();">
-									<i class="glyphicon glyphicon-log-out"></i>&nbsp;<span class="trans-logout"></span>
-								</button>
-							</li>
-						</ul>
+					<div class="navbar-right">
+						<div class="dropdown pull-right">
+							<button type="button" class="dropdown-toggle btn btn-primary navbar-btn" data-toggle="dropdown" role="button"><i class="fa fa-gear fa-spin fa-3x"></i></button>
+							<ul class="dropdown-menu">
+								<li class="text-right">
+									<select class="btn navbar-btn btn-primary fixed-width-10" id="app-lang-select" name="language" onchange="app.translate($(this).val());">
+										<option value="en">English</option>
+										<option value="de">Deutsch</option>
+										<option value="sk">Slovenčina</option>
+									</select>
+								</li>
+								<li class="divider"></li>
+								<li class="text-right app-nav app-nav-logout hidden">
+									<button class="btn navbar-btn btn-warning fixed-width-10" onclick="em.logout();">
+										<i class="glyphicon glyphicon-log-out"></i>&nbsp;<span class="trans-logout"></span>
+									</button>
+								</li>
+							</ul>
+						</div>
+						<div class="pull-right hidden app-nav app-nav-eventlist">
+							<button type="button" class="btn btn-primary navbar-btn" onclick="em.loadEvents();">
+								<i class="fa fa-chevron-circle-left fa-3x"></i>
+							</button>
+						</div>
 					</div>
 				</div>
 			</nav>
 		</header>
+
 		<main class="container">
 			<!-- Login page -->
 			<div id="app-login" class="hidden">
