@@ -17,10 +17,10 @@
 				<div class="container-fluid">
 					<div class="navbar-header">
 						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-							<i class="fa fa-gear fa-spin fa-3x"></i>
+							<i class="fa fa-gear fa-spin fa-2x"></i>
 						</button>
 						<button type="button" class="navbar-toggle hidden app-nav app-nav-eventlist" onclick="em.loadEvents();">
-							<i class="fa fa-chevron-circle-left fa-3x"></i>
+							<i class="fa fa-chevron-circle-left fa-2x"></i>
 						</button>
 					</div>
 					<div class="collapse navbar-collapse" id="myNavbar">
@@ -71,7 +71,7 @@
 					-->
 					<tbody id="app-event-list-template" class="hidden">
 						<tr class="datavar-event-id">
-							<td class="col-xs-6">
+							<td>
 								<span class="var-event-name"></span>
 								<br>
 								<strong class="var-event-start"></strong>
@@ -81,15 +81,15 @@
 								<span class="var-event-place"></span>
 							</td>
 							
-							<td class="col-xs-1 text-center app-evlist-open">
+							<td class="text-center app-evlist-open">
 								<i class="glyphicon glyphicon-list-alt" onclick="em.openEvent($(this).closest('tr').data('eid'));"></i>
 							</td>
 							
-							<td class="col-xs-2 app-evlist-print">
+							<td class="app-evlist-print">
 								<span class="trans-control-eventPrint"></span>
 								<i class="glyphicon glyphicon-print pull-right" onclick="alert('print not implemented yet!');"></i>
 							</td>
-							<td class="col-xs-3 app-evlist-info">
+							<td class="app-evlist-info">
 								<span class="var-event-invited"></span>&nbsp;<span class="trans-event-invited"></span><br>
 								<span class="var-event-checked"></span>&nbsp;<span class="trans-event-checked"></span>(<span class="var-event-percentage"></span>&percnt;)
 							</td>
