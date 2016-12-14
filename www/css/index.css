@@ -22,11 +22,7 @@ main {
 	background-repeat: no-repeat;
 	vertical-align: middle;
 }
-.icon-logo {
-	width: 1.5em;
-	height: 1.5em;
-	background-image: url(../img/logo.png);
-}
+
 .icon-list {
 	width: 2em;
 	height: 2.5em;
@@ -94,4 +90,19 @@ h1 {
 
 .glyphicon-list-alt, .glyphicon-print {
 	font-size: 3em !important;
+}
+
+.icon-logo {
+	display: inline-block;
+	background-image: url(../img/logo.png);
+	background-size: 100% 100%;
+	background-position: center;
+	background-repeat: no-repeat;
+	vertical-align: middle;
+}
+
+.insert-logo {
+	background-image: url(../img/logo.png);
+	background-size: auto 100%;
+	background-repeat: no-repeat;
 }

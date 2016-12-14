@@ -13,15 +13,17 @@
 	</head>
 	<body>
 		<header>
-			<nav class="navbar navbar-static-top">
+			<nav class="navbar navbar-static-top insert-logo">
 				<div class="container-fluid">
 					<div class="navbar-header">
-						<i class="icon icon-logo navbar-brand"></i>
-						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
-							<i style="height: 2em; width: 2em;" class="glyphicon glyphicon-align-justify"></i>
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+							<i class="fa fa-gear fa-spin fa-3x"></i>
+						</button>
+						<button type="button" class="navbar-toggle hidden app-nav app-nav-eventlist" onclick="em.loadEvents();">
+							<i class="fa fa-chevron-circle-left fa-3x"></i>
 						</button>
 					</div>
-					<div class="collapse navbar-collapse" id="navbar">
+					<div class="collapse navbar-collapse" id="myNavbar">
 						<ul class="nav navbar-nav navbar-right text-right">
 							<li>
 								<select class="btn navbar-btn btn-primary" id="app-lang-select" name="language" onchange="app.translate($(this).val());">
@@ -30,12 +32,7 @@
 									<option value="sk">Slovenčina</option>
 								</select>
 							</li>
-							<li class="hidden app-nav app-nav-eventlist">
-								<button class="btn navbar-btn btn-success" onclick="em.loadEvents();">
-									<span class="trans-control-loadEvents"></span>
-								</button>
-							</li>
-							<li class="hidden app-nav app-nav-logout">
+							<li>
 								<button class="btn navbar-btn btn-warning" onclick="em.logout();">
 									<i class="glyphicon glyphicon-log-out"></i>&nbsp;<span class="trans-logout"></span>
 								</button>
