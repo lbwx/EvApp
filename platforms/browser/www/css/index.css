@@ -106,3 +106,7 @@ h1 {
 	background-size: auto 100%;
 	background-repeat: no-repeat;
 }
+
+.fixed-width-10 {
+	width: 10em !important;
+}
