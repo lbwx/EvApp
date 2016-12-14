@@ -8,20 +8,25 @@
 		<meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
 		<link rel="stylesheet" type="text/css" href="css/index.css" />
 		<link rel="stylesheet" type="text/css" href="fa/css/font-awesome.min.css" />
-		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
 		<title>Event Manager</title>
 	</head>
 	<body>
-		<header class="navbar navbar-static-top">
-			<div class="container-fluid">
-				<div class="navbar-header">
-					<h1><i class="icon icon-logo"></i>Event manager</h1>
+		<header>
+			<nav class="navbar navbar-static-top">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<h1><i class="icon icon-logo"></i>Event manager</h1>
+					</div>
+					<button class="app-nav app-nav-logout btn btn-warning navbar-btn navbar-right hidden" onclick="em.logout();"><i class="glyphicon glyphicon-log-out"></i>&nbsp;<span class="trans-logout"></span></button>
+					<button class="app-nav app-nav-eventlist btn btn-success navbar-btn navbar-right hidden" onclick="em.loadEvents();"><span class="trans-control-loadEvents"></span></button>
+					<select class="btn btn-primary navbar-btn navbar-right" id="app-lang-select" name="language" onchange="app.translate($(this).val());">
+						<option value="en">English</option>
+						<option value="de">Deutsch</option>
+						<option value="sk">Slovenčina</option>
+					</select>
 				</div>
-				<ul class="nav navbar-nav navbar-right">
-					<li><a class="app-nav app-nav-eventlist btn btn-primary hidden" onclick="em.loadEvents();">Show Events</a></li>
-					<li><a class="app-nav app-nav-logout btn btn-primary hidden" onclick="em.logout();">Logout</a></li>
-				</ul>
-			</div>
+			</nav>
 		</header>
 		<main class="container">
 			<!-- Login page -->
@@ -36,12 +41,12 @@
 						<input type="password" class="form-control" id="password" name="password" placeholder="Enter password" value="hei3h6nsd">
 					</div>
 					<div class="form-group">
-						<label><input type="checkbox" class="checkbox-inline" name="remember">&nbsp;Remember me!</label>
+						<label><input type="checkbox" class="checkbox-inline" name="remember">&nbsp;<span class="trans-login-remember"></span></label>
 					</div>
 					<div>
-						<button type="submit" class="btn btn-primary pull-right">LogIn</button>
+						<button type="submit" class="btn btn-primary pull-right"><span class="trans-login-submit"></span></button>
 					</div>
-				</form>				
+				</form>
 			</div>
 			<!-- EventList page -->
 			<div id="app-event-list" class="hidden">
@@ -51,8 +56,8 @@
 						"var-*" classes are required for my templating system!
 					-->
 					<tbody id="app-event-list-template" class="hidden">
-						<tr>
-							<td>
+						<tr class="datavar-event-id">
+							<td class="col-xs-6">
 								<span class="var-event-name"></span>
 								<br>
 								<strong class="var-event-start"></strong>
@@ -61,12 +66,18 @@
 								<br>
 								<span class="var-event-place"></span>
 							</td>
-							<td>
-								<button class="btn btn-link var-event-id" onclick="em.openEvent($(this));"><i class="icon icon-list"></i></button>
+							
+							<td class="col-xs-1 text-center app-evlist-open">
+								<i class="glyphicon glyphicon-list-alt" onclick="em.openEvent($(this).closest('tr').data('eid'));"></i>
 							</td>
-							<td>
-								<span class="var-event-invited"></span>&nbsp;G&auml;ste geladen<br>
-								<span class="var-event-checked"></span>&nbsp;G&auml;ste eingecheckt(<span class="var-event-percentage"></span>&percnt;)
+							
+							<td class="col-xs-2 app-evlist-print">
+								<span class="trans-control-eventPrint"></span>
+								<i class="glyphicon glyphicon-print pull-right" onclick="alert('print not implemented yet!');"></i>
+							</td>
+							<td class="col-xs-3 app-evlist-info">
+								<span class="var-event-invited"></span>&nbsp;<span class="trans-event-invited"></span><br>
+								<span class="var-event-checked"></span>&nbsp;<span class="trans-event-checked"></span>(<span class="var-event-percentage"></span>&percnt;)
 							</td>
 						</tr>
 					</tbody>
@@ -84,28 +95,28 @@
 					</div>
 					<div class="col-sm-2">
 						<select name="filter" class="form-control">
-							<option value="0">Filter</option>
-							<option value="1">Anwesend</option>
-							<option value="2">Abwesend</option>
-							<option value="3">VIP</option>
-							<option value="4">No VIP</option>
+							<option value="0" class="trans-search-filter"></option>
+							<option value="1" class="trans-search-present"></option>
+							<option value="2" class="trans-search-absent"></option>
+							<option value="3" class="trans-search-vip"></option>
+							<option value="4" class="trans-search-noVip"></option>
 						</select>
 					</div>
 					<div class="col-sm-4">
-						<button class="btn btn-default">Alle anzeigen</button>
-						<button class="btn btn-default">Gast anlegen</button>
-						<button class="btn btn-default">Liste drucken</button>
+						<button class="btn btn-default"><span class="trans-control-guestShowAll"></span></button>
+						<button class="btn btn-default"><span class="trans-control-guestAddGuest"></span></button>
+						<button class="btn btn-default"><span class="trans-control-guestPrint"></span></button>
 					</div>
 				</div>
 				<table class="table table-responsive table-striped table-condensed">
 					<thead>
 						<tr>
-							<th>Name</th>
-							<th>Institution</th>
+							<th><span class="trans-guest-name"></span></th>
+							<th><span class="trans-guest-institution"></span></th>
 							<th><i class="icon icon-plus-guests"></i></th>
-							<th>VIP</th>
-							<th>Info</th>
-							<th>Check-In</th>
+							<th><span class="trans-guest-vip"></span></th>
+							<th><span class="trans-guest-info"></span></th>
+							<th><span class="trans-guest-check"></span></th>
 						</tr>
 					</thead>
 					<!--[L:]
@@ -167,7 +178,7 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title">Guest Detail</h4>
+						<h4 class="modal-title"><span class="trans-guest-detail"></span></h4>
 					</div>
 					<div class="modal-body">
 						<span class="var-guestdetail-name"></span><br>
@@ -176,16 +187,10 @@
 						<span class="var-guestdetail-email"></span><br>
 						<span class="var-guestdetail-detail"></span>
 					</div>
-					<div class="modal-footer">
-						
-					</div>
 				</div>
 			</div>
 		</div>
-		
-		
-		
-		
+
 		<script type="text/javascript" src="js/jquery-3.0.0.min.js"></script>
 		<script type="text/javascript" src="cordova.js"></script>
 		<script type="text/javascript" src="js/index.js"></script>

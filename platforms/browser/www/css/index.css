@@ -70,3 +70,28 @@ main {
 h1 {
 	display: inline-block;
 }
+/*******************************/
+#app-event-list-content tr td {
+	vertical-align: middle !important;
+	padding-left: 1em;
+	padding-right: 1em;
+}
+
+.app-evlist-open {
+	color: white;
+	background-color: #003b5c;
+}
+
+.app-evlist-print {
+	color: #003b5c;
+	background-color: #ededed;
+}
+
+.app-evlist-info {
+	color: #003b5c;
+	background-color: #d5e2e8;
+}
+
+.glyphicon-list-alt, .glyphicon-print {
+	font-size: 3em !important;
+}

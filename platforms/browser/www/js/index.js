@@ -33,6 +33,7 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
+		app.translate('en');
         app.receivedEvent();
     },
     // Update DOM on a Received Event
@@ -40,9 +41,20 @@ var app = {
 		if(localStorage.getItem('token')===null) {
 			show.login();
 		} else {
-			em.loadEvents();
+			em.loadEvents('en');
 		}
-    }
+    },
+	translate: function(ln) {
+		switch (ln) {
+			case 'en': lang = trans.en; break;
+			case 'de': lang = trans.de; break;
+			case 'sk': lang = trans.sk; break;
+		}
+		
+		for (var key in lang) {
+			$(document).find('.trans-' + key.replace('_', '-')).html(lang[key]);
+		}
+	}
 };
 
 var AppConst = {
@@ -98,6 +110,7 @@ var em = {
 			$("#app-event-list-content").html('');
 			response.result.forEach(function(event){
 				var eventRow = $('#app-event-list-template').clone();
+				eventRow.find('.datavar-event-id').attr('data-eid', event.eid);
 				eventRow.find('.var-event-name').html(event.name);
 				eventRow.find('.var-event-start').html(event.start);
 				eventRow.find('.var-event-end').html(event.end);
@@ -113,12 +126,12 @@ var em = {
 			alert(response.error);
 		}
 	},
-	openEvent: function(element) {
+	openEvent: function(eid) {
 		this.GuestLimit = 10;
 		this.ajaxRequest({
 			action: 'open-event',
 			request: {
-				eid: element.val(),
+				eid: eid,
 				ordering: this.GuestOrdering,
 				limit: this.GuestLimit,
 				offset: this.GuestOffset
@@ -230,5 +243,80 @@ var show = {
 		this.hideAll();
 		$('.app-nav-eventlist').removeClass('hidden');
 		$('#app-event-open').removeClass('hidden');
+	}
+};
+
+var trans = {
+	en: {
+		langName: 'English',
+		login_submit: 'LogIn',
+		login_remember: 'Remember Me',
+		logout: 'LogOut',
+		control_loadEvents: 'Show Events',
+		control_eventPrint: 'Print',
+		control_guestShowAll: 'Show all',
+		control_guestAddGuest: 'Add guest',
+		control_guestPrint: 'Print',
+		event_invited: 'guests invited',
+		event_checked: 'guests checked',
+		guest_name: 'Event',
+		guest_institution: 'institution',
+		guest_vip: 'VIP',
+		guest_info: 'info',
+		guest_check: 'check in',
+		guest_detail: 'detail',
+		search_filter: 'filter',
+		search_present: 'present',
+		search_absent: 'absent',
+		search_vip: 'VIP',
+		search_noVip: 'no VIP'
+	},
+	de: {
+		langName: 'Deutsch',
+		login_submit: 'Anmeldung',
+		login_remember: 'Merken mir? Or? :D',
+		logout: 'Ausloggen',
+		control_loadEvents: 'Veranstaltungen',
+		control_eventPrint: 'Liste drucken',
+		control_guestShowAll: 'Alle anzeigen',
+		control_guestAddGuest: 'Gast anlegen',
+		control_guestPrint: 'Liste drucken',
+		event_invited: 'G&auml;ste geladen',
+		event_checked: 'G&auml;ste eingecheckt',
+		guest_name: 'Veranstaltung',
+		guest_institution: 'Institution',
+		guest_vip: 'VIP',
+		guest_info: 'Info',
+		guest_check: 'Check-In',
+		guest_detail: 'Detail',
+		search_filter: 'Filter',
+		search_present: 'Anwesend',
+		search_absent: 'Abwesend',
+		search_vip: 'VIP',
+		search_noVip: 'no VIP'
+	},
+	sk: {
+		langName: 'Slovenčina',
+		login_submit: 'Prihlásiť',
+		login_remember: 'Zapamätať',
+		logout: 'Odhlásiť',
+		control_loadEvents: 'Zobraziť eventy',
+		control_eventPrint: 'Vytlačiť zoznam',
+		control_guestShowAll: 'Ukáž všetkých',
+		control_guestAddGuest: 'Pozvať hosťa',
+		control_guestPrint: 'Tlačiť',
+		event_invited: 'pozvaných hostí',
+		event_checked: 'potvrdených hostí',
+		guest_name: 'udalosť',
+		guest_institution: 'spoločnosť',
+		guest_vip: 'VIP',
+		guest_info: 'info',
+		guest_check: 'check',
+		guest_detail: 'detail',
+		search_filter: 'filter',
+		search_present: 'prítomní',
+		search_absent: 'neprítomní',
+		search_vip: 'VIP',
+		search_noVip: 'bez VIP'
 	}
 };
