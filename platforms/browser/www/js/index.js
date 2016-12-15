@@ -50,9 +50,8 @@ var app = {
 			case 'de': lang = trans.de; break;
 			case 'sk': lang = trans.sk; break;
 		}
-		
 		for (var key in lang) {
-			$(document).find('.trans-' + key.replace('_', '-')).html(lang[key]);
+			$('.trans-' + key.replace('_', '-')).html(lang[key]);
 		}
 	}
 };
@@ -98,6 +97,9 @@ var em = {
 				show.error();
 			}
 		});
+	},
+	openSettings: function() {
+		$('#app-settings').modal('show');
 	},
 	loadEvents: function() {
 		this.ajaxRequest({
@@ -269,7 +271,10 @@ var trans = {
 		search_present: 'present',
 		search_absent: 'absent',
 		search_vip: 'VIP',
-		search_noVip: 'no VIP'
+		search_noVip: 'no VIP',
+
+		settings_title: 'Settings',
+		settings_language: 'Language'
 	},
 	de: {
 		langName: 'Deutsch',
@@ -293,7 +298,10 @@ var trans = {
 		search_present: 'Anwesend',
 		search_absent: 'Abwesend',
 		search_vip: 'VIP',
-		search_noVip: 'no VIP'
+		search_noVip: 'no VIP',
+
+		settings_title: 'Einstellungen',
+		settings_language: 'Sprache'
 	},
 	sk: {
 		langName: 'Slovenčina',
@@ -317,6 +325,9 @@ var trans = {
 		search_present: 'prítomní',
 		search_absent: 'neprítomní',
 		search_vip: 'VIP',
-		search_noVip: 'bez VIP'
+		search_noVip: 'bez VIP',
+
+		settings_title: 'Nastavenia',
+		settings_language: 'Jazyk'
 	}
 };
