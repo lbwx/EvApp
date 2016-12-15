@@ -239,14 +239,19 @@
 					</div>
 					<div id="modal-event-settings" class="modal-body">
 						<div class="container-fluid">
-							<div class="row">
-								<b>Settings</b><br>
-								........<br>
-								........<br>
-								........<br>
-								........<br>
-								........<br>
-							</div>
+							<form>
+								<fieldset>
+									<legend>Filters</legend>
+
+
+									<div class="input-group">
+										<output name="rangeValue" for="range" class="input-group-addon" id="addon-eventSettings-guestCount"></output>
+										<input oninput="rangeValue.value = parseInt(range.value);" type="range" name="range" id="range" value="10" step="5" min="10" max="50" class="form-control" aria-describedby="addon-eventSettings-guestCount">
+										
+									</div>
+
+								</fieldset>
+							</form>
 						</div>
 					</div>
 				</div>
