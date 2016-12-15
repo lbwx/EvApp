@@ -13,18 +13,21 @@
 	</head>
 	<body>
 		<header>
-			<nav class="navbar navbar-static-top insert-logo">
+			<nav id="app-navigation" class="navbar navbar-static-top insert-logo">
 				<div class="container-fluid">
 					<div class="navbar-right">
 						<div class="pull-right">
-							<button type="button" class="btn btn-primary navbar-btn hidden app-nav app-nav-eventlist" onclick="em.loadEvents();">
+							<button type="button" class="btn btn-info navbar-btn hidden app-nav-eventSettings" onclick="eventWindow.open();">
+								<i class="fa fa-search fa-3x"></i>
+							</button>
+							<button type="button" class="btn btn-primary navbar-btn hidden app-nav-eventList" onclick="em.loadEvents();">
 								<i class="fa fa-chevron-circle-left fa-3x"></i>
 							</button>
-							<button class="btn navbar-btn btn-warning app-nav app-nav-logout hidden" onclick="em.logout();">
+							<button class="btn navbar-btn btn-warning app-nav-logout hidden" onclick="em.logout();">
 								<i class="fa fa-sign-out fa-3x"></i>
 							</button>
-							<button type="button" class="btn btn-primary navbar-btn" onclick="em.openSettings();">
-								<i class="fa fa-gear fa-spin fa-3x"></i>
+							<button type="button" class="btn btn-primary navbar-btn app-nav-settings" onclick="em.openSettings();">
+								<i class="fa fa-gear fa-3x"></i>
 							</button>
 						</div>
 					</div>
@@ -116,7 +119,7 @@
 					<thead>
 						<tr>
 							<th><span class="trans-guest-name"></span></th>
-							<th><span class="trans-guest-institution"></span></th>
+							<th><span class="trans-guest-institution hidden-xs"></span></th>
 							<th><i class="icon icon-plus-guests"></i></th>
 							<th><span class="trans-guest-vip"></span></th>
 							<th><span class="trans-guest-info"></span></th>
@@ -158,13 +161,9 @@
 					<tbody id="app-event-open-content"></tbody>
 				</table>
 			</div>
-			
-			
 			<!-- Errors from remote server -->
 			<div id="app-error" class="hidden"></div>
 		</main>
-
-
 
 		<!-- Modal -->
 		<!-- Settings -->
@@ -187,6 +186,68 @@
 							</div>
 						</form>
 						<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	<!-- EventSettings -->
+		<div id="app-settings-event" class="modal fade" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="btn btn-danger pull-right" data-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i></button>
+						<button type="button" class="btn btn-info pull-right" onclick="eventWindow.settings();">Settings</button>
+						<button type="button" class="btn btn-info pull-right" onclick="eventWindow.detail();">Detail</button>
+						<h4 class="modal-title var-eventDetail-title"></h4>
+					</div>
+					<div id="modal-event-detail" class="modal-body">
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col-xs-3">
+									<span>Place:</span>
+								</div>
+								<div class="col-xs-9">
+									<span class="var-eventDetail-place"></span>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-3">
+									<span>Event Start:</span>
+								</div>
+								<div class="col-xs-9">
+									<span class="var-eventDetail-start"></span>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-3">
+									<span>Event End:</span>
+								</div>
+								<div class="col-xs-9">
+									<span class="var-eventDetail-end"></span>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-3">
+									<span>Description</span>
+								</div>
+								<div class="col-xs-9">
+									<span class="var-eventDetail-description"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="modal-event-settings" class="modal-body">
+						<div class="container-fluid">
+							<div class="row">
+								<b>Settings</b><br>
+								........<br>
+								........<br>
+								........<br>
+								........<br>
+								........<br>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

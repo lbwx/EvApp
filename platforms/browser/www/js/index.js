@@ -144,13 +144,13 @@ var em = {
 	},
 	openEventResponse: function(response) {
 		if(response.status) {
-			$('#app-event-open').find('.var-event-name').html(response.event);
+			localStorage.setItem('currentEvent', JSON.stringify(response.event));
+			$('#app-event-open').find('.var-event-name').html(response.event.title);
 			$("#app-event-open-content").html('');
 			response.guests.forEach(function(guest){
 				var guestRow = $('#app-event-open-template').clone();
 				guestRow.children('tr').attr('data-iid', guest.id);
 				guestRow.find('.var-guest-name').html(guest.firstName + " " + guest.lastName);
-				guestRow.find('.var-guest-employer').html(guest.employer);
 				guestRow.find('.var-guest-plus').html(guest.plus);
 				guestRow.find('.var-guest-vip').addClass(((guest.vip) ? 'icon-is-vip' : 'icon-no-vip'));
 				guestRow.find('.var-guest-checkin').addClass(AppConst.checkin[guest.checkin].icon);
@@ -223,28 +223,34 @@ var em = {
 
 //-------------------------------------------------------------------
 var show = {
+	containter: $("main"),
+	navigation: $('#app-navigation'),
 	hideAll: function() {
-		$("main").children('div').addClass('hidden');
+		this.containter.children('div').addClass('hidden');
+		this.navigation.find('button').addClass('hidden');
 	},
 	error: function() {
 		this.hideAll();
-		$('#app-error').removeClass('hidden');
+		this.containter.find('#app-error').removeClass('hidden');
 	},
 	login: function() {
 		this.hideAll();
-		$('.app-nav').addClass('hidden');
-		$('#app-login').removeClass('hidden');
+		this.containter.find('#app-login').removeClass('hidden');
+		this.navigation.find('.app-nav-settings').removeClass('hidden');
 	},
 	eventList: function() {
 		this.hideAll();
-		$('.app-nav-eventlist').addClass('hidden');
-		$('.app-nav-logout').removeClass('hidden');
-		$('#app-event-list').removeClass('hidden');
+		this.containter.find('#app-event-list').removeClass('hidden');
+		this.navigation.find('.app-nav-logout').removeClass('hidden');
+		this.navigation.find('.app-nav-settings').removeClass('hidden');
 	},
 	eventOpen: function() {
 		this.hideAll();
-		$('.app-nav-eventlist').removeClass('hidden');
-		$('#app-event-open').removeClass('hidden');
+		this.containter.find('#app-event-open').removeClass('hidden');
+		this.navigation.find('.app-nav-eventSettings').removeClass('hidden');
+		this.navigation.find('.app-nav-eventList').removeClass('hidden');
+		this.navigation.find('.app-nav-logout').removeClass('hidden');
+		this.navigation.find('.app-nav-settings').removeClass('hidden');
 	}
 };
 
@@ -329,5 +335,30 @@ var trans = {
 
 		settings_title: 'Nastavenia',
 		settings_language: 'Jazyk'
+	}
+};
+
+var eventWindow = {
+	modal: $('#app-settings-event'),
+	hideAll: function() {
+		this.modal.find('.modal-body').addClass('hidden');
+	},
+	open: function() {
+		var event = JSON.parse(localStorage.getItem('currentEvent'));
+		this.modal.find('.var-eventDetail-title').html(event.title);
+		this.modal.find('.var-eventDetail-place').html(event.place);
+		this.modal.find('.var-eventDetail-start').html(event.start);
+		this.modal.find('.var-eventDetail-end').html(event.end);
+		this.modal.find('.var-eventDetail-description').html(event.description);
+		this.detail();
+		this.modal.modal('show');
+	},
+	detail: function() {
+		this.hideAll();
+		this.modal.find('#modal-event-detail').removeClass('hidden');
+	},
+	settings: function() {
+		this.hideAll();
+		this.modal.find('#modal-event-settings').removeClass('hidden');
 	}
 };
