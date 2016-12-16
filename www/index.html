@@ -242,14 +242,31 @@
 							<form>
 								<fieldset>
 									<legend>Filters</legend>
-
-
 									<div class="input-group">
-										<output name="rangeValue" for="range" class="input-group-addon" id="addon-eventSettings-guestCount"></output>
-										<input oninput="rangeValue.value = parseInt(range.value);" type="range" name="range" id="range" value="10" step="5" min="10" max="50" class="form-control" aria-describedby="addon-eventSettings-guestCount">
-										
+										<span style="min-width: 11em;" id="name-filter-addon" class="input-group-addon trans-filter-esByName"></span>
+										<input type="text" class="form-control" name="name-filter" id="name-filter" aria-describedby="name-filter-addon" oninput="appStorage.setEsFilterName($(this).val());">
 									</div>
-
+									<div class="input-group">
+										<span style="min-width: 11em;" id="present-filter-addon" class="input-group-addon trans-filter-esByPresent"></span>
+										<select name="present" class="form-control" aria-describedby="present-filter-addon" onchange="appStorage.setEsFilterPresent($(this).val());">
+											<option value="1">Any</option>
+											<option value="2" class="trans-search-present"></option>
+											<option value="3" class="trans-search-absent"></option>
+										</select>
+									</div>
+									<div class="input-group">
+										<span style="min-width: 11em;" id="vip-filter-addon" class="input-group-addon trans-filter-esByVip"></span>
+										<select name="present" class="form-control" aria-describedby="vip-filter-addon" onchange="appStorage.setEsFilterVip($(this).val());">
+											<option value="1">Any</option>
+											<option value="2" class="trans-search-vip"></option>
+											<option value="3" class="trans-search-noVip"></option>
+										</select>
+									</div>
+									<div class="input-group">
+										<output style="min-width: 11em;" name="rangeValue" for="app-es-guest-range" class="input-group-addon trans-filter-esResultCount" id="addon-eventSettings-guestCount"></output>
+										<input oninput="appStorage.setEsResultCount(parseInt(range.value)); rangeValue.value = $(this).siblings('output').html().replace(/\d+/g, appStorage.getEsResultCount());" type="range" name="range" id="app-es-guest-range" step="5" min="5" max="50" class="form-control" aria-describedby="addon-eventSettings-guestCount">
+									</div>
+									<button class="btn btn-primary" onclick="em.openEvent(appStorage.getCurrentEvent());" data-dismiss="modal" aria-label="Close">load</button>
 								</fieldset>
 							</form>
 						</div>

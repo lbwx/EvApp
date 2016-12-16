@@ -16,6 +16,56 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+var appStorage = {
+	defVars: {
+		esFilterVip: 0,
+		esResultCount: 10
+	},
+
+	setCurrentEvent: function(eid) {
+		localStorage.setItem('app_current_event', eid);
+	},
+	getCurrentEvent: function() {
+		return localStorage.getItem('app_current_event');
+	},
+	
+	
+	setEsFilterName: function(name) {
+		localStorage.setItem('es_filterName', name);
+	},
+	getEsFilterName: function() {
+		return localStorage.getItem('es_filterName');
+	},
+	setEsFilterPresent: function(present) {
+		localStorage.setItem('es_filterPresent', present);
+	},
+	getEsFilterPresent: function() {
+		return localStorage.getItem('es_filterPresent');
+	},
+	setEsFilterVip: function(vip) {
+		localStorage.setItem('es_filterVip', vip);
+	},
+	getEsFilterVip: function() {
+		es_filterVip = localStorage.getItem('es_filterVip');
+		if(es_filterVip === null) {
+			return this.defVars.esFilterVip;
+		} else {
+			return parseInt(es_filterVip);
+		}
+	},
+	setEsResultCount: function(resultCount) {
+		localStorage.setItem('es_rc', resultCount);
+	},
+	getEsResultCount: function() {
+		es_rc = localStorage.getItem('es_rc');
+		if(es_rc === null) {
+			return this.defVars.esResultCount;
+		} else {
+			return parseInt(es_rc);
+		}
+	}
+};
+
 var app = {
     // Application Constructor
     initialize: function() {
@@ -78,7 +128,6 @@ var AppConst = {
 var em = {
 	ApiUrl: 'http://eventmanager.webaholix.sk/api/',
 	GuestOrdering: 'ASC',
-	GuestLimit: 10,
 	GuestOffset: 0,
 	ajaxRequest: function (data) {
 		var request = {};
@@ -129,16 +178,17 @@ var em = {
 		}
 	},
 	openEvent: function(eid) {
-		this.GuestLimit = 10;
-		this.ajaxRequest({
+		appStorage.setCurrentEvent(eid);
+		em.ajaxRequest({
 			action: 'open-event',
 			request: {
-				eid: eid,
+				eid: appStorage.getCurrentEvent(),
 				ordering: this.GuestOrdering,
-				limit: this.GuestLimit,
-				offset: this.GuestOffset
+				limit: appStorage.getEsResultCount(),
+				offset: this.GuestOffset,
+				filterVip: appStorage.getEsFilterVip()
 			},
-			response: this.openEventResponse
+			response: em.openEventResponse
 		});
 		
 	},
@@ -232,6 +282,7 @@ var show = {
 	error: function() {
 		this.hideAll();
 		this.containter.find('#app-error').removeClass('hidden');
+		this.navigation.find('.app-nav-logout').removeClass('hidden');
 	},
 	login: function() {
 		this.hideAll();
@@ -278,6 +329,11 @@ var trans = {
 		search_absent: 'absent',
 		search_vip: 'VIP',
 		search_noVip: 'no VIP',
+		
+		filter_esByName: 'Name filter',
+		filter_esByPresent: 'Present filter',
+		filter_esByVip: 'VIP filter',
+		filter_esResultCount: 'Show ' + appStorage.getEsResultCount() + ' guests',
 
 		settings_title: 'Settings',
 		settings_language: 'Language'
@@ -306,6 +362,11 @@ var trans = {
 		search_vip: 'VIP',
 		search_noVip: 'no VIP',
 
+		filter_esByName: 'Name-Filter',
+		filter_esByPresent: 'Teilnahme-Filter',
+		filter_esByVip: 'VIP-Filter',
+		filter_esResultCount: 'Zeigen ' + appStorage.getEsResultCount() + ' Gäste',
+
 		settings_title: 'Einstellungen',
 		settings_language: 'Sprache'
 	},
@@ -332,6 +393,11 @@ var trans = {
 		search_absent: 'neprítomní',
 		search_vip: 'VIP',
 		search_noVip: 'bez VIP',
+
+		filter_esByName: 'Hľadať podľa mena',
+		filter_esByPresent: 'Hľadať prítomných',
+		filter_esByVip: 'Hľadať VIP',
+		filter_esResultCount: 'Zobraziť ' + appStorage.getEsResultCount() + ' hostí',
 
 		settings_title: 'Nastavenia',
 		settings_language: 'Jazyk'
@@ -360,5 +426,6 @@ var eventWindow = {
 	settings: function() {
 		this.hideAll();
 		this.modal.find('#modal-event-settings').removeClass('hidden');
+		this.modal.find('#app-es-guest-range').val(appStorage.getEsResultCount());
 	}
 };
