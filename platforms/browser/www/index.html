@@ -93,28 +93,6 @@
 			</div>
 			<!-- EventOpen page -->
 			<div id="app-event-open" class="hidden">
-				<div id="app-event-filter">
-					<div class="col-sm-3">
-						<span class="var-event-name"></span>
-					</div>
-					<div class="col-sm-3">
-						<input type="text" name="search" class="form-control" placeholder="Search">
-					</div>
-					<div class="col-sm-2">
-						<select name="filter" class="form-control">
-							<option value="0" class="trans-search-filter"></option>
-							<option value="1" class="trans-search-present"></option>
-							<option value="2" class="trans-search-absent"></option>
-							<option value="3" class="trans-search-vip"></option>
-							<option value="4" class="trans-search-noVip"></option>
-						</select>
-					</div>
-					<div class="col-sm-4">
-						<button class="btn btn-default"><span class="trans-control-guestShowAll"></span></button>
-						<button class="btn btn-default"><span class="trans-control-guestAddGuest"></span></button>
-						<button class="btn btn-default"><span class="trans-control-guestPrint"></span></button>
-					</div>
-				</div>
 				<table class="table table-responsive table-striped table-condensed">
 					<thead>
 						<tr>
@@ -197,15 +175,15 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="btn btn-danger pull-right" data-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i></button>
-						<button type="button" class="btn btn-info pull-right" onclick="eventWindow.settings();">Settings</button>
-						<button type="button" class="btn btn-info pull-right" onclick="eventWindow.detail();">Detail</button>
+						<button type="button" class="btn btn-info pull-right trans-eventDetail-settings" onclick="eventWindow.settings();"></button>
+						<button type="button" class="btn btn-info pull-right trans-eventDetail-detail" onclick="eventWindow.detail();"></button>
 						<h4 class="modal-title var-eventDetail-title"></h4>
 					</div>
 					<div id="modal-event-detail" class="modal-body">
 						<div class="container-fluid">
 							<div class="row">
 								<div class="col-xs-3">
-									<span>Place:</span>
+									<span class="trans-eventDetail-place"></span>
 								</div>
 								<div class="col-xs-9">
 									<span class="var-eventDetail-place"></span>
@@ -213,7 +191,7 @@
 							</div>
 							<div class="row">
 								<div class="col-xs-3">
-									<span>Event Start:</span>
+									<span class="trans-eventDetail-start"></span>
 								</div>
 								<div class="col-xs-9">
 									<span class="var-eventDetail-start"></span>
@@ -221,7 +199,7 @@
 							</div>
 							<div class="row">
 								<div class="col-xs-3">
-									<span>Event End:</span>
+									<span class="trans-eventDetail-end"></span>
 								</div>
 								<div class="col-xs-9">
 									<span class="var-eventDetail-end"></span>
@@ -229,7 +207,7 @@
 							</div>
 							<div class="row">
 								<div class="col-xs-3">
-									<span>Description</span>
+									<span class="trans-eventDetail-description"></span>
 								</div>
 								<div class="col-xs-9">
 									<span class="var-eventDetail-description"></span>
@@ -249,7 +227,7 @@
 									<div class="input-group">
 										<span style="min-width: 11em;" id="present-filter-addon" class="input-group-addon trans-filter-esByPresent"></span>
 										<select name="present" class="form-control" aria-describedby="present-filter-addon" onchange="appStorage.setEsFilterPresent($(this).val());">
-											<option value="1">Any</option>
+											<option value="1" class="trans-search-all"></option>
 											<option value="2" class="trans-search-present"></option>
 											<option value="3" class="trans-search-absent"></option>
 										</select>
@@ -257,16 +235,17 @@
 									<div class="input-group">
 										<span style="min-width: 11em;" id="vip-filter-addon" class="input-group-addon trans-filter-esByVip"></span>
 										<select name="present" class="form-control" aria-describedby="vip-filter-addon" onchange="appStorage.setEsFilterVip($(this).val());">
-											<option value="1">Any</option>
+											<option value="1" class="trans-search-all"></option>
 											<option value="2" class="trans-search-vip"></option>
 											<option value="3" class="trans-search-noVip"></option>
 										</select>
 									</div>
 									<div class="input-group">
 										<output style="min-width: 11em;" name="rangeValue" for="app-es-guest-range" class="input-group-addon trans-filter-esResultCount" id="addon-eventSettings-guestCount"></output>
-										<input oninput="appStorage.setEsResultCount(parseInt(range.value)); rangeValue.value = $(this).siblings('output').html().replace(/\d+/g, appStorage.getEsResultCount());" type="range" name="range" id="app-es-guest-range" step="5" min="5" max="50" class="form-control" aria-describedby="addon-eventSettings-guestCount">
+										<input oninput="appStorage.setEsResultCount(parseInt(range.value)); rangeValue.value = $(this).siblings('output').html().replace(/\d+/g, appStorage.getEsResultCount());" type="range" name="range" id="app-es-guest-range" step="5" min="0" max="50" class="form-control" aria-describedby="addon-eventSettings-guestCount">
 									</div>
-									<button class="btn btn-primary" onclick="em.openEvent(appStorage.getCurrentEvent());" data-dismiss="modal" aria-label="Close">load</button>
+									<button class="btn btn-warning trans-eventDetail-reset" onclick="eventWindow.resetFilters(); em.openEvent(appStorage.getCurrentEvent());" data-dismiss="modal" aria-label="Close"></button>
+									<button class="btn btn-primary trans-eventDetail-search" onclick="em.openEvent(appStorage.getCurrentEvent());" data-dismiss="modal" aria-label="Close"></button>
 								</fieldset>
 							</form>
 						</div>

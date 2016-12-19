@@ -19,7 +19,7 @@
 var appStorage = {
 	defVars: {
 		esFilterVip: 0,
-		esResultCount: 10
+		esResultCount: 0
 	},
 
 	setCurrentEvent: function(eid) {
@@ -186,7 +186,9 @@ var em = {
 				ordering: this.GuestOrdering,
 				limit: appStorage.getEsResultCount(),
 				offset: this.GuestOffset,
-				filterVip: appStorage.getEsFilterVip()
+				filterVip: appStorage.getEsFilterVip(),
+				filterPresent: appStorage.getEsFilterPresent(),
+				filterName: appStorage.getEsFilterName()
 			},
 			response: em.openEventResponse
 		});
@@ -329,6 +331,16 @@ var trans = {
 		search_absent: 'absent',
 		search_vip: 'VIP',
 		search_noVip: 'no VIP',
+		search_all: 'all',
+		
+		eventDetail_place: 'Place',
+		eventDetail_start: "Event's start",
+		eventDetail_end: "Event's end",
+		eventDetail_description: "Description",
+		eventDetail_settings: "Settings",
+		eventDetail_detail: "Detail",
+		eventDetail_reset: "Reset",
+		eventDetail_search: "Search",
 		
 		filter_esByName: 'Name filter',
 		filter_esByPresent: 'Present filter',
@@ -361,6 +373,16 @@ var trans = {
 		search_absent: 'Abwesend',
 		search_vip: 'VIP',
 		search_noVip: 'no VIP',
+		search_all: 'alle',
+
+		eventDetail_place: 'Ort',
+		eventDetail_start: "Ereignisstart",
+		eventDetail_end: "Ereignisende",
+		eventDetail_description: "Beschreibung",
+		eventDetail_settings: "Einstellungen",
+		eventDetail_detail: "Detail",
+		eventDetail_reset: "Zurücksetzen",
+		eventDetail_search: "Suche",
 
 		filter_esByName: 'Name-Filter',
 		filter_esByPresent: 'Teilnahme-Filter',
@@ -393,6 +415,16 @@ var trans = {
 		search_absent: 'neprítomní',
 		search_vip: 'VIP',
 		search_noVip: 'bez VIP',
+		search_all: 'všetko',
+
+		eventDetail_place: 'Miesto',
+		eventDetail_start: "Začiatok",
+		eventDetail_end: "Koniec",
+		eventDetail_description: "Info",
+		eventDetail_settings: "Nastavenia",
+		eventDetail_detail: "Detail",
+		eventDetail_reset: "Zrušiť filtre",
+		eventDetail_search: "Vyhľadať",
 
 		filter_esByName: 'Hľadať podľa mena',
 		filter_esByPresent: 'Hľadať prítomných',
@@ -416,7 +448,7 @@ var eventWindow = {
 		this.modal.find('.var-eventDetail-start').html(event.start);
 		this.modal.find('.var-eventDetail-end').html(event.end);
 		this.modal.find('.var-eventDetail-description').html(event.description);
-		this.detail();
+		this.settings();
 		this.modal.modal('show');
 	},
 	detail: function() {
@@ -427,5 +459,11 @@ var eventWindow = {
 		this.hideAll();
 		this.modal.find('#modal-event-settings').removeClass('hidden');
 		this.modal.find('#app-es-guest-range').val(appStorage.getEsResultCount());
+	},
+	resetFilters: function() {
+		appStorage.setEsFilterName('');
+		appStorage.setEsFilterPresent(1);
+		appStorage.setEsFilterVip(1);
+		appStorage.setEsResultCount(0);
 	}
 };
