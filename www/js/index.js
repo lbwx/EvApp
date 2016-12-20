@@ -19,7 +19,22 @@
 var appStorage = {
 	defVars: {
 		esFilterVip: 0,
-		esResultCount: 0
+		esResultCount: 0,
+
+		load_events_type: 0,
+		default_language: 'en'
+	},
+
+	setLanguage: function(lang) {
+		localStorage.setItem('app_language', lang);
+	},
+	getLanguage: function() {
+		var app_language = localStorage.getItem('app_language');
+		if(app_language === null) {
+			return this.defVars.default_language;
+		} else {
+			return app_language;
+		}
 	},
 
 	setCurrentEvent: function(eid) {
@@ -63,6 +78,18 @@ var appStorage = {
 		} else {
 			return parseInt(es_rc);
 		}
+	},
+	
+	setLoadEventsType: function(LET) {
+		localStorage.setItem('load_events_type', LET);
+	},
+	getLoadEventsType: function() {
+		load_events_type = localStorage.getItem('load_events_type');
+		if(load_events_type === null) {
+			return this.defVars.load_events_type;
+		} else {
+			return load_events_type;
+		}
 	}
 };
 
@@ -83,8 +110,10 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-		app.translate('en');
+		app.translate();
         app.receivedEvent();
+		$('#app-settings-load-events').val(appStorage.getLoadEventsType());
+		$('#app-lang-select').val(appStorage.getLanguage());
     },
     // Update DOM on a Received Event
     receivedEvent: function() {
@@ -94,8 +123,8 @@ var app = {
 			em.loadEvents('en');
 		}
     },
-	translate: function(ln) {
-		switch (ln) {
+	translate: function() {
+		switch (appStorage.getLanguage()) {
 			case 'en': lang = trans.en; break;
 			case 'de': lang = trans.de; break;
 			case 'sk': lang = trans.sk; break;
@@ -108,18 +137,9 @@ var app = {
 
 var AppConst = {
 	checkin: [
-		{
-			icon: 'fa-question',
-			btn: 'btn-info'
-		},
-		{
-			icon: 'fa-thumbs-o-up',
-			btn: 'btn-success'
-		},
-		{
-			icon: 'fa-thumbs-o-down',
-			btn: 'btn-warning'
-		}
+		{ icon: 'fa-question', btn: 'btn-info'},
+		{ icon: 'fa-thumbs-o-up', btn: 'btn-success' },
+		{ icon: 'fa-thumbs-o-down', btn: 'btn-warning'}
 	]
 };
 
@@ -153,6 +173,7 @@ var em = {
 	loadEvents: function() {
 		this.ajaxRequest({
 			action: 'get-events',
+			request: {type: appStorage.getLoadEventsType()},
 			response: this.loadEventsResponse
 		});
 	},
@@ -300,10 +321,12 @@ var show = {
 	eventOpen: function() {
 		this.hideAll();
 		this.containter.find('#app-event-open').removeClass('hidden');
+		this.navigation.find('.app-nav-eventAddGuest').removeClass('hidden');
 		this.navigation.find('.app-nav-eventSettings').removeClass('hidden');
 		this.navigation.find('.app-nav-eventList').removeClass('hidden');
 		this.navigation.find('.app-nav-logout').removeClass('hidden');
 		this.navigation.find('.app-nav-settings').removeClass('hidden');
+		this.navigation.find('#app-nav-scan-invitation').removeClass('hidden');
 	}
 };
 
@@ -437,33 +460,97 @@ var trans = {
 };
 
 var eventWindow = {
-	modal: $('#app-settings-event'),
+	modalSettings: $('#app-settings-event'),
+	modalAddGuest: $('#app-event-addGuest'),
+	formAddGuest: $('#app-add-guest-to-event-form'),
 	hideAll: function() {
-		this.modal.find('.modal-body').addClass('hidden');
+		this.modalSettings.find('.modal-body').addClass('hidden');
 	},
 	open: function() {
 		var event = JSON.parse(localStorage.getItem('currentEvent'));
-		this.modal.find('.var-eventDetail-title').html(event.title);
-		this.modal.find('.var-eventDetail-place').html(event.place);
-		this.modal.find('.var-eventDetail-start').html(event.start);
-		this.modal.find('.var-eventDetail-end').html(event.end);
-		this.modal.find('.var-eventDetail-description').html(event.description);
+		this.modalSettings.find('.var-eventDetail-title').html(event.title);
+		this.modalSettings.find('.var-eventDetail-place').html(event.place);
+		this.modalSettings.find('.var-eventDetail-start').html(event.start);
+		this.modalSettings.find('.var-eventDetail-end').html(event.end);
+		this.modalSettings.find('.var-eventDetail-description').html(event.description);
 		this.settings();
-		this.modal.modal('show');
+		this.modalSettings.modal('show');
 	},
 	detail: function() {
 		this.hideAll();
-		this.modal.find('#modal-event-detail').removeClass('hidden');
+		this.modalSettings.find('#modal-event-detail').removeClass('hidden');
 	},
 	settings: function() {
 		this.hideAll();
-		this.modal.find('#modal-event-settings').removeClass('hidden');
-		this.modal.find('#app-es-guest-range').val(appStorage.getEsResultCount());
+		this.modalSettings.find('#modal-event-settings').removeClass('hidden');
+		this.modalSettings.find('#app-es-guest-range').val(appStorage.getEsResultCount());
 	},
 	resetFilters: function() {
 		appStorage.setEsFilterName('');
 		appStorage.setEsFilterPresent(1);
 		appStorage.setEsFilterVip(1);
 		appStorage.setEsResultCount(0);
+	},
+	addGuest: function() {
+		var event = JSON.parse(localStorage.getItem('currentEvent'));
+		this.modalAddGuest.find('.var-eventDetail-title').html(event.title);
+		this.modalAddGuest.modal('show');
+	},
+	handleAddGuestForm: function() {
+		var event = JSON.parse(localStorage.getItem('currentEvent'));
+		if(this.validateAddGuestForm()) {
+			em.ajaxRequest({
+				action: 'event-add-guest',
+				request: {
+					eid: event.eid,
+					form: this.formAddGuest.serialize()
+				},
+				response: this.handleAddGuestFormResponse
+			});
+		} else {
+			return false;
+		}
+	},
+	handleAddGuestFormResponse: function(response) {
+		if(response.status) {
+			eventWindow.modalAddGuest.modal('hide');
+			eventWindow.resetAddGuestForm();
+			em.openEvent(appStorage.getCurrentEvent());
+		} else {
+			alert(response.error);
+		}
+	},
+	validateAddGuestForm: function() {
+		var valid = true;
+		if(this.formAddGuest.find('input[name="firstName"]').val() === '') {
+			this.formAddGuest.find('input[name="firstName"]').addClass('btn-danger');
+			valid = false;
+		}
+		if(this.formAddGuest.find('input[name="lastName"]').val() === '') {
+			this.formAddGuest.find('input[name="lastName"]').addClass('btn-danger');
+			valid = false;
+		}
+		if(this.formAddGuest.find('input[name="email"]').val() === '') {
+			this.formAddGuest.find('input[name="email"]').addClass('btn-danger');
+			valid = false;
+		}
+		return valid;
+	},
+	resetAddGuestForm: function() {
+		this.formAddGuest.find('input').removeClass('btn-danger');
+		this.formAddGuest.find('input').val('');
+	},
+	scan: function() {
+		cordova.plugins.barcodeScanner.scan(
+				function (result) {
+					if(!result.cancelled) {
+						alert("Barcode type is: " + result.format);
+						alert("decoded text is: " + result.text);
+					} else {
+						alert("You have canceled scan");
+					}
+				},
+				function (error) { alert('Scanning failed: ' + error); }
+		);
 	}
 };

@@ -17,6 +17,12 @@
 				<div class="container-fluid">
 					<div class="navbar-right">
 						<div class="pull-right">
+							<button id="app-nav-scan-invitation" type="button" class="btn btn-primary navbar-btn hidden" onclick="eventWindow.scan();">
+								<i class="fa fa-camera fa-3x"></i>
+							</button>
+							<button type="button" class="btn btn-success navbar-btn hidden app-nav-eventAddGuest" onclick="eventWindow.addGuest();">
+								<i class="fa fa-user-plus fa-3x"></i>
+							</button>
 							<button type="button" class="btn btn-info navbar-btn hidden app-nav-eventSettings" onclick="eventWindow.open();">
 								<i class="fa fa-search fa-3x"></i>
 							</button>
@@ -154,13 +160,27 @@
 					</div>
 					<div class="modal-body">
 						<form>
-							<div class="input-group">
-								<span class="input-group-addon trans-settings-language" id="addon-language">Lang</span>
-								<select class="form-control" aria-describedby="addon-language" id="app-lang-select" name="language" onchange="app.translate($(this).val());">
-									<option value="en">English</option>
-									<option value="de">Deutsch</option>
-									<option value="sk">Slovenčina</option>
-								</select>
+							<div class="form-group">
+								<div class="input-group">
+									<span class="input-group-addon trans-settings-language" style="min-width: 10em;" id="addon-language">Lang</span>
+									<select class="form-control" aria-describedby="addon-language" id="app-lang-select" name="language" onchange="appStorage.setLanguage($(this).val()); app.translate();">
+										<option value="en">English</option>
+										<option value="de">Deutsch</option>
+										<option value="sk">Slovenčina</option>
+									</select>
+								</div>
+							</div>
+							<div>
+								<div class="input-group">
+									<span class="input-group-addon" id="addon-load-events" style="min-width: 10em;">Load Events</span>
+									<select class="form-control" aria-describedby="addon-load-events" id="app-settings-load-events" onchange="appStorage.setLoadEventsType($(this).val()); em.loadEvents();">
+										<option value="0">Current & future</option>
+										<option value="1">Only current</option>
+										<option value="2">Only future</option>
+										<option value="3">Only past</option>
+										<option value="4">All</option>
+									</select>
+								</div>
 							</div>
 						</form>
 						<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
@@ -253,7 +273,67 @@
 				</div>
 			</div>
 		</div>
-
+	<!--Event Add Guest-->
+		<div id="app-event-addGuest" class="modal fade" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="btn btn-danger pull-right" data-dismiss="modal" aria-label="Close"><i class="fa fa-times"></i></button>
+						<button type="button" class="btn btn-info pull-right" onclick="alert('in progress');">Select from list</button>
+						<button type="button" class="btn btn-info pull-right" onclick="alert('in progress');">Create new</button>
+						<h4 class="modal-title var-eventDetail-title"></h4>
+					</div>
+					<div id="modal-event-addGuest-new" class="modal-body">
+						<form id="app-add-guest-to-event-form">
+							<div class="form-group row">
+								<label for="guestInv-firstName" class="col-xs-3 control-label">First Name</label>
+								<div class="col-xs-9">
+									<input id="guestInv-firstName" type="text" name="firstName" class="form-control">
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="guestInv-lastName" class="col-xs-3 control-label">Last Name</label>
+								<div class="col-xs-9">
+									<input id="guestInv-lastName" type="text" name="lastName" class="form-control">
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="guestInv-email" class="col-xs-3 control-label">Email</label>
+								<div class="col-xs-9">
+									<input id="guestInv-email" type="email" name="email" class="form-control">
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="guestInv-title" class="col-xs-3 control-label">Title</label>
+								<div class="col-xs-9">
+									<input id="guestInv-title" type="text" name="title" class="form-control">
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="guestInvEmployer" class="col-xs-3 control-label">Employer</label>
+								<div class="col-xs-9">
+									<input id="guestInvEmployer" type="text" name="employer" class="form-control">
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="guestInv-info" class="col-xs-3 control-label">Info</label>
+								<div class="col-xs-9">
+									<input id="guestInv-info" type="text" name="info" class="form-control">
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-xs-12">
+									<button type="submit" onclick="eventWindow.handleAddGuestForm();" class="btn btn-primary pull-right">Add to event</button>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div id="modal-event-addGuest-list" class="modal-body">
+						from list
+					</div>
+				</div>
+			</div>
+		</div>
 
 
 		<div id="app-info" class="modal fade" tabindex="-1" role="dialog">
@@ -297,6 +377,7 @@
 		<script type="text/javascript">
 			app.initialize();
 			$('#login-form').submit(function(e){ e.preventDefault(); });
+			$('#app-add-guest-to-event-form').submit(function(e){ e.preventDefault(); });
 		</script>
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	</body>
