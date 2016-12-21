@@ -562,7 +562,7 @@ var eventWindow = {
 	},
 	scanResponse: function(response) {
 		if(response.status) {
-			alert(JSON.stringify(response.invitation));
+			alert(JSON.stringify(response.invitation.guestName));
 		} else {
 			alert(response.message);
 		}
