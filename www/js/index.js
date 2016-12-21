@@ -545,7 +545,7 @@ var eventWindow = {
 			function (result) {
 				if(!result.cancelled) {
 					em.ajaxRequest({
-						action: 'check-incitation',
+						action: 'check-invitation',
 						request: {
 							code: result.text
 						},
@@ -561,6 +561,10 @@ var eventWindow = {
 		);
 	},
 	scanResponse: function(response) {
-		alert(response.text);
+		if(response.status) {
+			alert(JSON.stringify(response.invitation));
+		} else {
+			alert(response.message);
+		}
 	}
 };
