@@ -92,7 +92,6 @@ var appStorage = {
 		}
 	}
 };
-
 var app = {
     // Application Constructor
     initialize: function() {
@@ -139,7 +138,6 @@ var app = {
 		}
 	}
 };
-
 var AppConst = {
 	checkin: [
 		{ icon: 'fa-question', btn: 'btn-info'},
@@ -147,8 +145,6 @@ var AppConst = {
 		{ icon: 'fa-thumbs-o-down', btn: 'btn-warning'}
 	]
 };
-
-
 //-------------------------------------------------------------------
 var em = {
 	ApiUrl: 'http://eventmanager.webaholix.sk/api/',
@@ -298,7 +294,6 @@ var em = {
 		show.login();
 	}
 };
-
 //-------------------------------------------------------------------
 var show = {
 	containter: $("main"),
@@ -334,7 +329,7 @@ var show = {
 		this.navigation.find('#app-nav-scan-invitation').removeClass('hidden');
 	}
 };
-
+//-------------------------------------------------------------------
 var trans = {
 	en: {
 		langName: 'English',
@@ -463,7 +458,7 @@ var trans = {
 		settings_language: 'Jazyk'
 	}
 };
-
+//-------------------------------------------------------------------
 var eventWindow = {
 	modalSettings: $('#app-settings-event'),
 	modalAddGuest: $('#app-event-addGuest'),
@@ -549,7 +544,13 @@ var eventWindow = {
 		cordova.plugins.barcodeScanner.scan(
 			function (result) {
 				if(!result.cancelled) {
-					alert("Decoded text is: " + result.text);
+					em.ajaxRequest({
+						action: 'check-incitation',
+						request: {
+							code: result.text
+						},
+						response: this.scanResponse
+					});
 				} else {
 					alert("You have cancelled scan");
 				}
@@ -558,5 +559,8 @@ var eventWindow = {
 				alert("Scanning failed: " + error);
 			}
 		);
+	},
+	scanResponse: function(response) {
+		alert(response.text);
 	}
 };
