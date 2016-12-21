@@ -549,7 +549,7 @@ var eventWindow = {
 						request: {
 							code: result.text
 						},
-						response: this.scanResponse
+						response: eventWindow.scanResponse
 					});
 				} else {
 					alert("You have cancelled scan");
