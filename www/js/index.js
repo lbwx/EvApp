@@ -217,6 +217,7 @@ var em = {
 		
 	},
 	openEventResponse: function(response) {
+		alert(JSON.stringify(response));
 		if(response.status) {
 			localStorage.setItem('currentEvent', JSON.stringify(response.event));
 			$('#app-event-open').find('.var-event-name').html(response.event.title);
